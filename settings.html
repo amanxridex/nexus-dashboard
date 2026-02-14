@@ -3,148 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users | NEXUS Admin</title>
+    <title>Settings | NEXUS Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/index.css">
-    <style>
-        /* Users Page Specific Styles */
-        .users-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .users-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .mini-stat {
-            background: rgba(26, 26, 26, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 1rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .mini-stat:hover {
-            transform: translateY(-2px);
-            border-color: var(--purple);
-        }
-        
-        .mini-stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        
-        .mini-stat-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 0.25rem;
-        }
-        
-        .filters-bar {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--bg-tertiary);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-        
-        .filter-group select {
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            outline: none;
-            cursor: pointer;
-        }
-        
-        .users-table-container {
-            background: rgba(26, 26, 26, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-        
-        .table-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .bulk-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-        
-        .page-btn {
-            width: 36px;
-            height: 36px;
-            border: 1px solid var(--border-color);
-            background: transparent;
-            color: var(--text-secondary);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .page-btn:hover, .page-btn.active {
-            background: var(--purple);
-            border-color: var(--purple);
-            color: white;
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-        
-        tr:hover .user-avatar {
-            border-color: var(--purple);
-            transform: scale(1.1);
-        }
-        
-        @media (max-width: 768px) {
-            .users-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/settings.css">
 </head>
 <body>
-    <!-- Same Sidebar as Dashboard -->
+    <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
@@ -161,7 +26,7 @@
                 <i class="fas fa-chart-line"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="users.html" class="nav-item active">
+            <a href="users.html" class="nav-item">
                 <i class="fas fa-users"></i>
                 <span>Users</span>
                 <span class="badge">2.4K</span>
@@ -188,7 +53,7 @@
                 <i class="fas fa-chart-pie"></i>
                 <span>Analytics</span>
             </a>
-            <a href="settings.html" class="nav-item">
+            <a href="settings.html" class="nav-item active">
                 <i class="fas fa-cog"></i>
                 <span>Settings</span>
             </a>
@@ -208,24 +73,25 @@
         </div>
     </aside>
 
+    <!-- Main Content -->
     <main class="main-content">
+        <!-- Top Bar -->
         <header class="topbar">
             <div class="topbar-left">
                 <button class="mobile-menu-toggle" id="mobileMenuToggle">
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search users..." id="userSearch">
+                <div class="page-title-mobile">
+                    <h2>Settings</h2>
                 </div>
             </div>
+
             <div class="topbar-right">
-                <button class="icon-btn" data-tooltip="Add User" onclick="addNewUser()">
-                    <i class="fas fa-plus"></i>
+                <button class="icon-btn" onclick="showHelp()" title="Help">
+                    <i class="fas fa-question-circle"></i>
                 </button>
-                <button class="icon-btn" onclick="toggleNotifications()">
+                <button class="icon-btn" onclick="toggleNotifications()" title="Notifications">
                     <i class="fas fa-bell"></i>
-                    <span class="notification-dot"></span>
                 </button>
                 <div class="user-menu">
                     <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Admin">
@@ -233,128 +99,1091 @@
             </div>
         </header>
 
+        <!-- Page Content -->
         <div class="page-content">
-            <div class="users-header">
-                <div>
-                    <h1>Users Management</h1>
-                    <p>Manage and monitor all platform users</p>
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="header-title">
+                    <h1>Settings</h1>
+                    <p>Manage your account and platform preferences</p>
                 </div>
-                <div class="page-actions">
-                    <button class="btn btn-secondary" onclick="exportUsers()">
-                        <i class="fas fa-download"></i>
-                        Export CSV
-                    </button>
-                    <button class="btn btn-primary" onclick="addNewUser()">
-                        <i class="fas fa-user-plus"></i>
-                        Add User
-                    </button>
+                <div class="unsaved-indicator" id="unsavedIndicator" style="display: none;">
+                    <i class="fas fa-circle"></i>
+                    <span>Unsaved changes</span>
                 </div>
             </div>
 
-            <!-- Mini Stats -->
-            <div class="users-stats">
-                <div class="mini-stat">
-                    <div class="mini-stat-value">2,451</div>
-                    <div class="mini-stat-label">Total Users</div>
-                </div>
-                <div class="mini-stat">
-                    <div class="mini-stat-value" style="color: var(--green)">2,103</div>
-                    <div class="mini-stat-label">Active</div>
-                </div>
-                <div class="mini-stat">
-                    <div class="mini-stat-value" style="color: var(--orange)">348</div>
-                    <div class="mini-stat-label">Inactive</div>
-                </div>
-                <div class="mini-stat">
-                    <div class="mini-stat-value" style="color: var(--purple)">156</div>
-                    <div class="mini-stat-label">New Today</div>
-                </div>
-            </div>
-
-            <!-- Filters -->
-            <div class="filters-bar">
-                <div class="filter-group">
-                    <i class="fas fa-filter" style="color: var(--text-muted)"></i>
-                    <select id="statusFilter" onchange="filterUsers()">
-                        <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="suspended">Suspended</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <i class="fas fa-graduation-cap" style="color: var(--text-muted)"></i>
-                    <select id="collegeFilter" onchange="filterUsers()">
-                        <option value="">All Colleges</option>
-                        <option value="iit">IITs</option>
-                        <option value="bits">BITS</option>
-                        <option value="nit">NITs</option>
-                        <option value="other">Others</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <i class="fas fa-calendar" style="color: var(--text-muted)"></i>
-                    <select id="dateFilter" onchange="filterUsers()">
-                        <option value="">All Time</option>
-                        <option value="today">Today</option>
-                        <option value="week">This Week</option>
-                        <option value="month">This Month</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Users Table -->
-            <div class="users-table-container">
-                <div class="table-toolbar">
-                    <div class="bulk-actions">
-                        <button class="btn btn-secondary" onclick="bulkDelete()" disabled id="bulkDeleteBtn">
-                            <i class="fas fa-trash"></i>
-                            Delete Selected
-                        </button>
-                        <button class="btn btn-secondary" onclick="bulkEmail()" disabled id="bulkEmailBtn">
-                            <i class="fas fa-envelope"></i>
-                            Send Email
-                        </button>
+            <!-- Settings Layout -->
+            <div class="settings-layout">
+                <!-- Settings Sidebar -->
+                <div class="settings-nav">
+                    <div class="settings-nav-item active" onclick="switchTab('profile')">
+                        <i class="fas fa-user-circle"></i>
+                        <div>
+                            <span>Profile</span>
+                            <small>Personal information</small>
+                        </div>
                     </div>
-                    <div style="color: var(--text-muted); font-size: 0.9rem;">
-                        Showing <span id="showingCount">10</span> of <span id="totalCount">2,451</span> users
+                    <div class="settings-nav-item" onclick="switchTab('account')">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <span>Account & Security</span>
+                            <small>Password, 2FA, sessions</small>
+                        </div>
+                    </div>
+                    <div class="settings-nav-item" onclick="switchTab('platform')">
+                        <i class="fas fa-sliders-h"></i>
+                        <div>
+                            <span>Platform</span>
+                            <small>General configuration</small>
+                        </div>
+                    </div>
+                    <div class="settings-nav-item" onclick="switchTab('payments')">
+                        <i class="fas fa-credit-card"></i>
+                        <div>
+                            <span>Payments</span>
+                            <small>Gateways, fees, payouts</small>
+                        </div>
+                    </div>
+                    <div class="settings-nav-item" onclick="switchTab('notifications')">
+                        <i class="fas fa-bell"></i>
+                        <div>
+                            <span>Notifications</span>
+                            <small>Email, SMS, push</small>
+                        </div>
+                    </div>
+                    <div class="settings-nav-item" onclick="switchTab('appearance')">
+                        <i class="fas fa-palette"></i>
+                        <div>
+                            <span>Appearance</span>
+                            <small>Theme, branding, colors</small>
+                        </div>
+                    </div>
+                    <div class="settings-nav-item" onclick="switchTab('integrations')">
+                        <i class="fas fa-plug"></i>
+                        <div>
+                            <span>Integrations</span>
+                            <small>APIs, webhooks, apps</small>
+                        </div>
+                    </div>
+                    <div class="settings-nav-item" onclick="switchTab('backup')">
+                        <i class="fas fa-database"></i>
+                        <div>
+                            <span>Backup & Data</span>
+                            <small>Export, restore, logs</small>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="table-wrapper">
-                    <table class="data-table" id="usersTable">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                                <th>User</th>
-                                <th>Email</th>
-                                <th>College</th>
-                                <th>Joined</th>
-                                <th>Bookings</th>
-                                <th>Spent</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody">
-                            <!-- Populated by JS -->
-                        </tbody>
-                    </table>
-                </div>
 
-                <div class="pagination">
-                    <button class="page-btn" onclick="changePage('prev')"><i class="fas fa-chevron-left"></i></button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn" onclick="changePage(2)">2</button>
-                    <button class="page-btn" onclick="changePage(3)">3</button>
-                    <button class="page-btn" onclick="changePage(4)">4</button>
-                    <button class="page-btn" onclick="changePage(5)">5</button>
-                    <button class="page-btn" onclick="changePage('next')"><i class="fas fa-chevron-right"></i></button>
+                <!-- Settings Content -->
+                <div class="settings-content">
+                    <!-- Profile Tab -->
+                    <div class="settings-tab active" id="tab-profile">
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>Profile Information</h3>
+                                <p>Update your personal details and public profile</p>
+                            </div>
+                            
+                            <div class="profile-card">
+                                <div class="profile-avatar-section">
+                                    <div class="avatar-upload">
+                                        <img src="https://ui-avatars.com/api/?name=Super+Admin&background=6366f1&color=fff&size=200" alt="Admin" id="profileAvatar">
+                                        <div class="avatar-overlay">
+                                            <button class="btn-icon" onclick="changeAvatar()">
+                                                <i class="fas fa-camera"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="avatar-actions">
+                                        <button class="btn btn-sm btn-secondary" onclick="changeAvatar()">Change Photo</button>
+                                        <button class="btn btn-sm btn-ghost" onclick="removeAvatar()">Remove</button>
+                                    </div>
+                                </div>
+
+                                <div class="profile-form">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Full Name</label>
+                                            <input type="text" value="Super Admin" id="fullName" onchange="markUnsaved()">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Username</label>
+                                            <input type="text" value="superadmin" id="username" onchange="markUnsaved()">
+                                            <span class="input-hint">@superadmin</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Email Address</label>
+                                            <input type="email" value="admin@nexus.com" id="email" onchange="markUnsaved()">
+                                            <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Phone Number</label>
+                                            <input type="tel" value="+91 98765 43210" id="phone" onchange="markUnsaved()">
+                                            <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Bio</label>
+                                        <textarea rows="3" id="bio" onchange="markUnsaved()" placeholder="Tell us about yourself...">Platform administrator with 5+ years of experience in event management.</textarea>
+                                        <span class="char-count">120/250</span>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Role</label>
+                                            <select id="role" onchange="markUnsaved()">
+                                                <option value="superadmin" selected>Super Administrator</option>
+                                                <option value="admin">Administrator</option>
+                                                <option value="moderator">Moderator</option>
+                                                <option value="viewer">Viewer</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Department</label>
+                                            <input type="text" value="Operations" id="department" onchange="markUnsaved()">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>Social Profiles</h3>
+                                <p>Connect your social media accounts</p>
+                            </div>
+                            
+                            <div class="social-connections">
+                                <div class="social-item connected">
+                                    <div class="social-icon google">
+                                        <i class="fab fa-google"></i>
+                                    </div>
+                                    <div class="social-info">
+                                        <h4>Google</h4>
+                                        <p>Connected as admin@nexus.com</p>
+                                    </div>
+                                    <button class="btn btn-sm btn-secondary" onclick="disconnectSocial('google')">Disconnect</button>
+                                </div>
+                                
+                                <div class="social-item">
+                                    <div class="social-icon github">
+                                        <i class="fab fa-github"></i>
+                                    </div>
+                                    <div class="social-info">
+                                        <h4>GitHub</h4>
+                                        <p>Not connected</p>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary" onclick="connectSocial('github')">Connect</button>
+                                </div>
+                                
+                                <div class="social-item connected">
+                                    <div class="social-icon twitter">
+                                        <i class="fab fa-twitter"></i>
+                                    </div>
+                                    <div class="social-info">
+                                        <h4>Twitter</h4>
+                                        <p>Connected as @nexus_admin</p>
+                                    </div>
+                                    <button class="btn btn-sm btn-secondary" onclick="disconnectSocial('twitter')">Disconnect</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account & Security Tab -->
+                    <div class="settings-tab" id="tab-account">
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>Change Password</h3>
+                                <p>Ensure your account is using a long, random password to stay secure</p>
+                            </div>
+                            
+                            <div class="password-form">
+                                <div class="form-group">
+                                    <label>Current Password</label>
+                                    <div class="password-input">
+                                        <input type="password" id="currentPassword">
+                                        <button type="button" onclick="togglePassword('currentPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>New Password</label>
+                                    <div class="password-input">
+                                        <input type="password" id="newPassword" oninput="checkPasswordStrength()">
+                                        <button type="button" onclick="togglePassword('newPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="password-strength" id="passwordStrength">
+                                        <div class="strength-bar"></div>
+                                        <span>Password strength: <strong>Good</strong></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Confirm New Password</label>
+                                    <div class="password-input">
+                                        <input type="password" id="confirmPassword">
+                                        <button type="button" onclick="togglePassword('confirmPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-primary" onclick="changePassword()">
+                                    <i class="fas fa-lock"></i> Update Password
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>Two-Factor Authentication</h3>
+                                <p>Add additional security to your account with 2FA</p>
+                            </div>
+                            
+                            <div class="security-card enabled">
+                                <div class="security-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="security-info">
+                                    <h4>Authenticator App</h4>
+                                    <p>Google Authenticator is enabled</p>
+                                </div>
+                                <div class="security-actions">
+                                    <button class="btn btn-sm btn-secondary" onclick="configure2FA()">Configure</button>
+                                    <button class="btn btn-sm btn-danger" onclick="disable2FA()">Disable</button>
+                                </div>
+                            </div>
+                            
+                            <div class="security-card">
+                                <div class="security-icon sms">
+                                    <i class="fas fa-sms"></i>
+                                </div>
+                                <div class="security-info">
+                                    <h4>SMS Authentication</h4>
+                                    <p>Receive codes via SMS</p>
+                                </div>
+                                <div class="security-actions">
+                                    <button class="btn btn-sm btn-primary" onclick="enableSMS()">Enable</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section danger-zone">
+                            <div class="section-header">
+                                <h3><i class="fas fa-exclamation-triangle"></i> Danger Zone</h3>
+                                <p>Irreversible and destructive actions</p>
+                            </div>
+                            
+                            <div class="danger-actions">
+                                <div class="danger-item">
+                                    <div>
+                                        <h4>Log out all sessions</h4>
+                                        <p>Sign out from all devices including this one</p>
+                                    </div>
+                                    <button class="btn btn-warning" onclick="logoutAllSessions()">
+                                        Log Out All
+                                    </button>
+                                </div>
+                                
+                                <div class="danger-item">
+                                    <div>
+                                        <h4>Delete account</h4>
+                                        <p>Permanently delete your admin account and all data</p>
+                                    </div>
+                                    <button class="btn btn-danger" onclick="deleteAccount()">
+                                        Delete Account
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Platform Tab -->
+                    <div class="settings-tab" id="tab-platform">
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>Platform Configuration</h3>
+                                <p>General settings for the NEXUS platform</p>
+                            </div>
+                            
+                            <div class="platform-settings">
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Platform Name</h4>
+                                        <p>Displayed in emails and browser title</p>
+                                    </div>
+                                    <div class="setting-control">
+                                        <input type="text" value="NEXUS" id="platformName" onchange="markUnsaved()">
+                                    </div>
+                                </div>
+                                
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Support Email</h4>
+                                        <p>Contact email for user inquiries</p>
+                                    </div>
+                                    <div class="setting-control">
+                                        <input type="email" value="support@nexus.com" id="supportEmail" onchange="markUnsaved()">
+                                    </div>
+                                </div>
+                                
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Default Timezone</h4>
+                                        <p>All dates and times will be displayed in this timezone</p>
+                                    </div>
+                                    <div class="setting-control">
+                                        <select id="timezone" onchange="markUnsaved()">
+                                            <option value="IST" selected>India Standard Time (IST)</option>
+                                            <option value="UTC">UTC</option>
+                                            <option value="EST">Eastern Time (EST)</option>
+                                            <option value="PST">Pacific Time (PST)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Date Format</h4>
+                                        <p>How dates are displayed across the platform</p>
+                                    </div>
+                                    <div class="setting-control">
+                                        <select id="dateFormat" onchange="markUnsaved()">
+                                            <option value="DD/MM/YYYY" selected>DD/MM/YYYY</option>
+                                            <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                            <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Currency</h4>
+                                        <p>Default currency for transactions</p>
+                                    </div>
+                                    <div class="setting-control">
+                                        <select id="currency" onchange="markUnsaved()">
+                                            <option value="INR" selected>₹ Indian Rupee (INR)</option>
+                                            <option value="USD">$ US Dollar (USD)</option>
+                                            <option value="EUR">€ Euro (EUR)</option>
+                                            <option value="GBP">£ British Pound (GBP)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>Feature Toggles</h3>
+                                <p>Enable or disable platform features</p>
+                            </div>
+                            
+                            <div class="toggle-list">
+                                <div class="toggle-item">
+                                    <div class="toggle-info">
+                                        <h4>User Registrations</h4>
+                                        <p>Allow new users to sign up</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" checked id="allowRegistration" onchange="markUnsaved()">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="toggle-item">
+                                    <div class="toggle-info">
+                                        <h4>Host Applications</h4>
+                                        <p>Allow new host applications</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" checked id="allowHostApps" onchange="markUnsaved()">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="toggle-item">
+                                    <div class="toggle-info">
+                                        <h4>Event Creation</h4>
+                                        <p>Hosts can create new events</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" checked id="allowEventCreation" onchange="markUnsaved()">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="toggle-item">
+                                    <div class="toggle-info">
+                                        <h4>Maintenance Mode</h4>
+                                        <p>Put site in maintenance mode</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="maintenanceMode" onchange="markUnsaved()">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="toggle-item">
+                                    <div class="toggle-info">
+                                        <h4>Email Verification Required</h4>
+                                        <p>Users must verify email before booking</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" checked id="emailVerification" onchange="markUnsaved()">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payments Tab -->
+                    <div class="settings-tab" id="tab-payments">
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>Payment Gateways</h3>
+                                <p>Configure payment processing options</p>
+                            </div>
+                            
+                            <div class="gateway-list">
+                                <div class="gateway-card active">
+                                    <div class="gateway-header">
+                                        <div class="gateway-icon">
+                                            <i class="fas fa-credit-card"></i>
+                                        </div>
+                                        <div class="gateway-info">
+                                            <h4>Razorpay</h4>
+                                            <span class="status-badge active">Active</span>
+                                        </div>
+                                    </div>
+                                    <div class="gateway-body">
+                                        <div class="form-group">
+                                            <label>API Key</label>
+                                            <input type="text" value="rzp_test_**************" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Webhook Secret</label>
+                                            <input type="password" value="whsec_**************" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="gateway-footer">
+                                        <button class="btn btn-sm btn-secondary" onclick="configureGateway('razorpay')">
+                                            Configure
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="disableGateway('razorpay')">
+                                            Disable
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="gateway-card">
+                                    <div class="gateway-header">
+                                        <div class="gateway-icon stripe">
+                                            <i class="fab fa-stripe"></i>
+                                        </div>
+                                        <div class="gateway-info">
+                                            <h4>Stripe</h4>
+                                            <span class="status-badge">Inactive</span>
+                                        </div>
+                                    </div>
+                                    <div class="gateway-body">
+                                        <p style="color: var(--text-muted); text-align: center; padding: 1rem;">
+                                            Not configured yet
+                                        </p>
+                                    </div>
+                                    <div class="gateway-footer">
+                                        <button class="btn btn-sm btn-primary" onclick="configureGateway('stripe')">
+                                            Setup
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>Fee Structure</h3>
+                                <p>Configure platform fees and commissions</p>
+                            </div>
+                            
+                            <div class="fee-settings">
+                                <div class="fee-card">
+                                    <div class="fee-icon">
+                                        <i class="fas fa-percentage"></i>
+                                    </div>
+                                    <div class="fee-info">
+                                        <h4>Platform Fee</h4>
+                                        <p>Percentage charged on each transaction</p>
+                                    </div>
+                                    <div class="fee-input">
+                                        <input type="number" value="5" min="0" max="50" id="platformFee" onchange="markUnsaved()">
+                                        <span>%</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="fee-card">
+                                    <div class="fee-icon">
+                                        <i class="fas fa-rupee-sign"></i>
+                                    </div>
+                                    <div class="fee-info">
+                                        <h4>Fixed Fee</h4>
+                                        <p>Fixed amount per transaction</p>
+                                    </div>
+                                    <div class="fee-input">
+                                        <span>₹</span>
+                                        <input type="number" value="10" min="0" id="fixedFee" onchange="markUnsaved()">
+                                    </div>
+                                </div>
+                                
+                                <div class="fee-card">
+                                    <div class="fee-icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="fee-info">
+                                        <h4>Payout Schedule</h4>
+                                        <p>How often hosts receive payouts</p>
+                                    </div>
+                                    <div class="fee-input">
+                                        <select id="payoutSchedule" onchange="markUnsaved()">
+                                            <option value="daily">Daily</option>
+                                            <option value="weekly" selected>Weekly</option>
+                                            <option value="biweekly">Bi-weekly</option>
+                                            <option value="monthly">Monthly</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Tab -->
+                    <div class="settings-tab" id="tab-notifications">
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>Email Notifications</h3>
+                                <p>Configure which emails you receive</p>
+                            </div>
+                            
+                            <div class="notification-categories">
+                                <div class="notif-category">
+                                    <h4><i class="fas fa-bell"></i> Platform Activity</h4>
+                                    
+                                    <div class="notif-item">
+                                        <div class="notif-info">
+                                            <h5>New User Registration</h5>
+                                            <p>When a new user signs up</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="notif-item">
+                                        <div class="notif-info">
+                                            <h5>New Host Application</h5>
+                                            <p>When someone applies to become a host</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="notif-item">
+                                        <div class="notif-info">
+                                            <h5>New Event Created</h5>
+                                            <p>When a host creates a new event</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="notif-category">
+                                    <h4><i class="fas fa-shopping-cart"></i> Transactions</h4>
+                                    
+                                    <div class="notif-item">
+                                        <div class="notif-info">
+                                            <h5>Payment Received</h5>
+                                            <p>For every successful payment</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="notif-item">
+                                        <div class="notif-info">
+                                            <h5>Refund Requested</h5>
+                                            <p>When a user requests a refund</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="notif-item">
+                                        <div class="notif-info">
+                                            <h5>Payout Processed</h5>
+                                            <p>When host payout is completed</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="notif-category">
+                                    <h4><i class="fas fa-exclamation-circle"></i> System Alerts</h4>
+                                    
+                                    <div class="notif-item">
+                                        <div class="notif-info">
+                                            <h5>Security Alerts</h5>
+                                            <p>Suspicious login attempts</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="notif-item">
+                                        <div class="notif-info">
+                                            <h5>System Updates</h5>
+                                            <p>Platform maintenance and updates</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="notif-item">
+                                        <div class="notif-info">
+                                            <h5>Weekly Digest</h5>
+                                            <p>Summary of weekly activity</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appearance Tab -->
+                    <div class="settings-tab" id="tab-appearance">
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>Theme Customization</h3>
+                                <p>Personalize the look and feel of your admin panel</p>
+                            </div>
+                            
+                            <div class="theme-section">
+                                <h4>Color Scheme</h4>
+                                <div class="theme-options">
+                                    <div class="theme-card active" onclick="setTheme('dark')">
+                                        <div class="theme-preview dark">
+                                            <div class="preview-sidebar"></div>
+                                            <div class="preview-content"></div>
+                                        </div>
+                                        <span>Dark</span>
+                                    </div>
+                                    <div class="theme-card" onclick="setTheme('light')">
+                                        <div class="theme-preview light">
+                                            <div class="preview-sidebar"></div>
+                                            <div class="preview-content"></div>
+                                        </div>
+                                        <span>Light</span>
+                                    </div>
+                                    <div class="theme-card" onclick="setTheme('auto')">
+                                        <div class="theme-preview auto">
+                                            <div class="preview-sidebar"></div>
+                                            <div class="preview-content"></div>
+                                        </div>
+                                        <span>Auto</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="theme-section">
+                                <h4>Accent Color</h4>
+                                <div class="color-palette">
+                                    <button class="color-btn active" style="--color: #6366f1;" onclick="setAccentColor('#6366f1')" title="Indigo">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="color-btn" style="--color: #ec4899;" onclick="setAccentColor('#ec4899')" title="Pink">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="color-btn" style="--color: #8b5cf6;" onclick="setAccentColor('#8b5cf6')" title="Purple">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="color-btn" style="--color: #3b82f6;" onclick="setAccentColor('#3b82f6')" title="Blue">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="color-btn" style="--color: #10b981;" onclick="setAccentColor('#10b981')" title="Green">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="color-btn" style="--color: #f59e0b;" onclick="setAccentColor('#f59e0b')" title="Amber">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="color-btn" style="--color: #ef4444;" onclick="setAccentColor('#ef4444')" title="Red">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="color-btn" style="--color: #06b6d4;" onclick="setAccentColor('#06b6d4')" title="Cyan">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="theme-section">
+                                <h4>Interface Density</h4>
+                                <div class="density-options">
+                                    <label class="density-option">
+                                        <input type="radio" name="density" value="compact">
+                                        <span>Compact</span>
+                                    </label>
+                                    <label class="density-option">
+                                        <input type="radio" name="density" value="comfortable" checked>
+                                        <span>Comfortable</span>
+                                    </label>
+                                    <label class="density-option">
+                                        <input type="radio" name="density" value="spacious">
+                                        <span>Spacious</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>Platform Branding</h3>
+                                <p>Customize how your platform appears to users</p>
+                            </div>
+                            
+                            <div class="branding-form">
+                                <div class="form-group">
+                                    <label>Platform Logo</label>
+                                    <div class="logo-upload">
+                                        <div class="logo-preview">
+                                            <i class="fas fa-layer-group"></i>
+                                        </div>
+                                        <div class="logo-actions">
+                                            <button class="btn btn-sm btn-secondary">Upload New</button>
+                                            <button class="btn btn-sm btn-ghost">Remove</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Favicon</label>
+                                    <div class="favicon-upload">
+                                        <div class="favicon-preview">
+                                            <i class="fas fa-layer-group" style="font-size: 24px;"></i>
+                                        </div>
+                                        <button class="btn btn-sm btn-secondary">Upload</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Login Page Background</label>
+                                    <div class="bg-upload">
+                                        <div class="bg-preview" style="background: linear-gradient(135deg, #6366f1, #ec4899);"></div>
+                                        <button class="btn btn-sm btn-secondary">Change</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Integrations Tab -->
+                    <div class="settings-tab" id="tab-integrations">
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>API Keys</h3>
+                                <p>Manage API access for external integrations</p>
+                            </div>
+                            
+                            <div class="api-keys">
+                                <div class="api-key-card">
+                                    <div class="api-key-header">
+                                        <div>
+                                            <h4>Production API Key</h4>
+                                            <p>Use this for live environment</p>
+                                        </div>
+                                        <span class="badge live">Live</span>
+                                    </div>
+                                    <div class="api-key-value">
+                                        <code>nexus_live_************************</code>
+                                        <button class="btn-icon" onclick="copyToClipboard('nexus_live_key')">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <div class="api-key-actions">
+                                        <button class="btn btn-sm btn-secondary" onclick="regenerateKey('live')">
+                                            <i class="fas fa-sync-alt"></i> Regenerate
+                                        </button>
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i> Revoke
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="api-key-card">
+                                    <div class="api-key-header">
+                                        <div>
+                                            <h4>Test API Key</h4>
+                                            <p>Use this for development and testing</p>
+                                        </div>
+                                        <span class="badge test">Test</span>
+                                    </div>
+                                    <div class="api-key-value">
+                                        <code>nexus_test_************************</code>
+                                        <button class="btn-icon" onclick="copyToClipboard('nexus_test_key')">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <div class="api-key-actions">
+                                        <button class="btn btn-sm btn-secondary" onclick="regenerateKey('test')">
+                                            <i class="fas fa-sync-alt"></i> Regenerate
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>Connected Services</h3>
+                                <p>Third-party integrations and webhooks</p>
+                            </div>
+                            
+                            <div class="integration-list">
+                                <div class="integration-item connected">
+                                    <div class="integration-icon">
+                                        <i class="fab fa-slack"></i>
+                                    </div>
+                                    <div class="integration-info">
+                                        <h4>Slack</h4>
+                                        <p>Notifications sent to #alerts channel</p>
+                                    </div>
+                                    <div class="integration-status">
+                                        <span class="status-dot"></span>
+                                        <button class="btn btn-sm btn-secondary">Configure</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="integration-item connected">
+                                    <div class="integration-icon">
+                                        <i class="fab fa-google-drive"></i>
+                                    </div>
+                                    <div class="integration-info">
+                                        <h4>Google Drive</h4>
+                                        <p>Backups stored in NEXUS_Backups folder</p>
+                                    </div>
+                                    <div class="integration-status">
+                                        <span class="status-dot"></span>
+                                        <button class="btn btn-sm btn-secondary">Configure</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="integration-item">
+                                    <div class="integration-icon">
+                                        <i class="fab fa-telegram"></i>
+                                    </div>
+                                    <div class="integration-info">
+                                        <h4>Telegram Bot</h4>
+                                        <p>Not connected</p>
+                                    </div>
+                                    <div class="integration-status">
+                                        <button class="btn btn-sm btn-primary">Connect</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="integration-item">
+                                    <div class="integration-icon">
+                                        <i class="fas fa-cloud"></i>
+                                    </div>
+                                    <div class="integration-info">
+                                        <h4>AWS S3</h4>
+                                        <p>Not connected</p>
+                                    </div>
+                                    <div class="integration-status">
+                                        <button class="btn btn-sm btn-primary">Connect</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backup Tab -->
+                    <div class="settings-tab" id="tab-backup">
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>Data Backup</h3>
+                                <p>Export and backup your platform data</p>
+                            </div>
+                            
+                            <div class="backup-options">
+                                <div class="backup-card">
+                                    <div class="backup-icon">
+                                        <i class="fas fa-download"></i>
+                                    </div>
+                                    <h4>Manual Backup</h4>
+                                    <p>Download a complete backup of your data</p>
+                                    <button class="btn btn-primary" onclick="createBackup()">
+                                        <i class="fas fa-download"></i> Create Backup
+                                    </button>
+                                </div>
+                                
+                                <div class="backup-card">
+                                    <div class="backup-icon">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                    <h4>Scheduled Backups</h4>
+                                    <p>Automatic daily backups at 2:00 AM</p>
+                                    <div class="backup-toggle">
+                                        <label class="switch">
+                                            <input type="checkbox" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span>Enabled</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="backup-card">
+                                    <div class="backup-icon">
+                                        <i class="fas fa-history"></i>
+                                    </div>
+                                    <h4>Restore Data</h4>
+                                    <p>Restore from a previous backup file</p>
+                                    <button class="btn btn-secondary" onclick="restoreBackup()">
+                                        <i class="fas fa-upload"></i> Upload Backup
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="backup-history">
+                                <h4>Recent Backups</h4>
+                                <div class="history-list">
+                                    <div class="history-item">
+                                        <div class="history-info">
+                                            <i class="fas fa-file-archive"></i>
+                                            <div>
+                                                <span class="history-name">backup_2024-03-15.zip</span>
+                                                <span class="history-meta">2.4 GB • Created automatically</span>
+                                            </div>
+                                        </div>
+                                        <div class="history-actions">
+                                            <button class="btn-icon" title="Download"><i class="fas fa-download"></i></button>
+                                            <button class="btn-icon" title="Delete"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="history-item">
+                                        <div class="history-info">
+                                            <i class="fas fa-file-archive"></i>
+                                            <div>
+                                                <span class="history-name">backup_2024-03-14.zip</span>
+                                                <span class="history-meta">2.3 GB • Created manually</span>
+                                            </div>
+                                        </div>
+                                        <div class="history-actions">
+                                            <button class="btn-icon" title="Download"><i class="fas fa-download"></i></button>
+                                            <button class="btn-icon" title="Delete"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="section-header">
+                                <h3>System Logs</h3>
+                                <p>View and download system activity logs</p>
+                            </div>
+                            
+                            <div class="logs-filter">
+                                <select id="logLevel">
+                                    <option value="all">All Levels</option>
+                                    <option value="error">Errors</option>
+                                    <option value="warning">Warnings</option>
+                                    <option value="info">Info</option>
+                                </select>
+                                <select id="logTime">
+                                    <option value="24h">Last 24 hours</option>
+                                    <option value="7d">Last 7 days</option>
+                                    <option value="30d">Last 30 days</option>
+                                </select>
+                                <button class="btn btn-sm btn-secondary" onclick="downloadLogs()">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </div>
+                            
+                            <div class="logs-viewer">
+                                <div class="log-entry error">
+                                    <span class="log-time">2024-03-15 14:32:15</span>
+                                    <span class="log-level">ERROR</span>
+                                    <span class="log-message">Payment gateway timeout for transaction #12345</span>
+                                </div>
+                                <div class="log-entry warning">
+                                    <span class="log-time">2024-03-15 13:45:22</span>
+                                    <span class="log-level">WARN</span>
+                                    <span class="log-message">High memory usage detected (85%)</span>
+                                </div>
+                                <div class="log-entry info">
+                                    <span class="log-time">2024-03-15 12:10:05</span>
+                                    <span class="log-level">INFO</span>
+                                    <span class="log-message">Daily backup completed successfully</span>
+                                </div>
+                                <div class="log-entry info">
+                                    <span class="log-time">2024-03-15 10:00:00</span>
+                                    <span class="log-level">INFO</span>
+                                    <span class="log-message">System started - v2.4.1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save Bar -->
+                    <div class="save-bar" id="saveBar" style="display: none;">
+                        <div class="save-info">
+                            <i class="fas fa-info-circle"></i>
+                            <span>You have unsaved changes</span>
+                        </div>
+                        <div class="save-actions">
+                            <button class="btn btn-ghost" onclick="discardChanges()">Discard</button>
+                            <button class="btn btn-primary" onclick="saveSettings()">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <script src="js/users.js"></script>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/settings.js"></script>
 </body>
 </html>
