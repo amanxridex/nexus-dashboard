@@ -3,148 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users | NEXUS Admin</title>
+    <title>Hosts | NEXUS Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/index.css">
-    <style>
-        /* Users Page Specific Styles */
-        .users-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .users-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .mini-stat {
-            background: rgba(26, 26, 26, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 1rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .mini-stat:hover {
-            transform: translateY(-2px);
-            border-color: var(--purple);
-        }
-        
-        .mini-stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        
-        .mini-stat-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 0.25rem;
-        }
-        
-        .filters-bar {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--bg-tertiary);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-        
-        .filter-group select {
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            outline: none;
-            cursor: pointer;
-        }
-        
-        .users-table-container {
-            background: rgba(26, 26, 26, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-        
-        .table-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .bulk-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-        
-        .page-btn {
-            width: 36px;
-            height: 36px;
-            border: 1px solid var(--border-color);
-            background: transparent;
-            color: var(--text-secondary);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .page-btn:hover, .page-btn.active {
-            background: var(--purple);
-            border-color: var(--purple);
-            color: white;
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-        
-        tr:hover .user-avatar {
-            border-color: var(--purple);
-            transform: scale(1.1);
-        }
-        
-        @media (max-width: 768px) {
-            .users-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/hosts.css">
 </head>
 <body>
-    <!-- Same Sidebar as Dashboard -->
+    <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
@@ -161,12 +26,12 @@
                 <i class="fas fa-chart-line"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="users.html" class="nav-item active">
+            <a href="users.html" class="nav-item">
                 <i class="fas fa-users"></i>
                 <span>Users</span>
                 <span class="badge">2.4K</span>
             </a>
-            <a href="hosts.html" class="nav-item">
+            <a href="hosts.html" class="nav-item active">
                 <i class="fas fa-user-tie"></i>
                 <span>Hosts</span>
                 <span class="badge">89</span>
@@ -208,7 +73,9 @@
         </div>
     </aside>
 
+    <!-- Main Content -->
     <main class="main-content">
+        <!-- Top Bar -->
         <header class="topbar">
             <div class="topbar-left">
                 <button class="mobile-menu-toggle" id="mobileMenuToggle">
@@ -216,16 +83,17 @@
                 </button>
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search users..." id="userSearch">
+                    <input type="text" placeholder="Search hosts by name, college, or email..." id="hostSearch">
                 </div>
             </div>
+
             <div class="topbar-right">
-                <button class="icon-btn" data-tooltip="Add User" onclick="addNewUser()">
-                    <i class="fas fa-plus"></i>
+                <button class="icon-btn" onclick="openVerificationQueue()" title="Verification Queue">
+                    <i class="fas fa-user-check"></i>
+                    <span class="notification-dot pulse">3</span>
                 </button>
-                <button class="icon-btn" onclick="toggleNotifications()">
+                <button class="icon-btn" onclick="toggleNotifications()" title="Notifications">
                     <i class="fas fa-bell"></i>
-                    <span class="notification-dot"></span>
                 </button>
                 <div class="user-menu">
                     <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Admin">
@@ -233,128 +101,210 @@
             </div>
         </header>
 
+        <!-- Page Content -->
         <div class="page-content">
-            <div class="users-header">
-                <div>
-                    <h1>Users Management</h1>
-                    <p>Manage and monitor all platform users</p>
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="header-title">
+                    <h1>Hosts Management</h1>
+                    <p>Manage event organizers and track their performance</p>
                 </div>
                 <div class="page-actions">
-                    <button class="btn btn-secondary" onclick="exportUsers()">
+                    <button class="btn btn-secondary" onclick="exportHosts()">
                         <i class="fas fa-download"></i>
-                        Export CSV
+                        <span>Export</span>
                     </button>
-                    <button class="btn btn-primary" onclick="addNewUser()">
-                        <i class="fas fa-user-plus"></i>
-                        Add User
+                    <button class="btn btn-primary" onclick="addNewHost()">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Host</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Mini Stats -->
-            <div class="users-stats">
-                <div class="mini-stat">
-                    <div class="mini-stat-value">2,451</div>
-                    <div class="mini-stat-label">Total Users</div>
-                </div>
-                <div class="mini-stat">
-                    <div class="mini-stat-value" style="color: var(--green)">2,103</div>
-                    <div class="mini-stat-label">Active</div>
-                </div>
-                <div class="mini-stat">
-                    <div class="mini-stat-value" style="color: var(--orange)">348</div>
-                    <div class="mini-stat-label">Inactive</div>
-                </div>
-                <div class="mini-stat">
-                    <div class="mini-stat-value" style="color: var(--purple)">156</div>
-                    <div class="mini-stat-label">New Today</div>
-                </div>
-            </div>
-
-            <!-- Filters -->
-            <div class="filters-bar">
-                <div class="filter-group">
-                    <i class="fas fa-filter" style="color: var(--text-muted)"></i>
-                    <select id="statusFilter" onchange="filterUsers()">
-                        <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="suspended">Suspended</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <i class="fas fa-graduation-cap" style="color: var(--text-muted)"></i>
-                    <select id="collegeFilter" onchange="filterUsers()">
-                        <option value="">All Colleges</option>
-                        <option value="iit">IITs</option>
-                        <option value="bits">BITS</option>
-                        <option value="nit">NITs</option>
-                        <option value="other">Others</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <i class="fas fa-calendar" style="color: var(--text-muted)"></i>
-                    <select id="dateFilter" onchange="filterUsers()">
-                        <option value="">All Time</option>
-                        <option value="today">Today</option>
-                        <option value="week">This Week</option>
-                        <option value="month">This Month</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Users Table -->
-            <div class="users-table-container">
-                <div class="table-toolbar">
-                    <div class="bulk-actions">
-                        <button class="btn btn-secondary" onclick="bulkDelete()" disabled id="bulkDeleteBtn">
-                            <i class="fas fa-trash"></i>
-                            Delete Selected
-                        </button>
-                        <button class="btn btn-secondary" onclick="bulkEmail()" disabled id="bulkEmailBtn">
-                            <i class="fas fa-envelope"></i>
-                            Send Email
-                        </button>
+            <!-- Hosts Overview Stats -->
+            <div class="hosts-overview">
+                <div class="overview-card featured">
+                    <div class="overview-icon gold">
+                        <i class="fas fa-crown"></i>
                     </div>
-                    <div style="color: var(--text-muted); font-size: 0.9rem;">
-                        Showing <span id="showingCount">10</span> of <span id="totalCount">2,451</span> users
+                    <div class="overview-info">
+                        <h3>89</h3>
+                        <p>Total Hosts</p>
+                        <div class="mini-chart">
+                            <svg viewBox="0 0 100 30" class="sparkline">
+                                <polyline fill="none" stroke="currentColor" stroke-width="2" 
+                                    points="0,25 20,20 40,23 60,15 80,18 100,5"/>
+                            </svg>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="table-wrapper">
-                    <table class="data-table" id="usersTable">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                                <th>User</th>
-                                <th>Email</th>
-                                <th>College</th>
-                                <th>Joined</th>
-                                <th>Bookings</th>
-                                <th>Spent</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody">
-                            <!-- Populated by JS -->
-                        </tbody>
-                    </table>
+                <div class="overview-card">
+                    <div class="overview-icon green">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3>72</h3>
+                        <p>Verified</p>
+                        <span class="trend up">+5 this week</span>
+                    </div>
                 </div>
+                
+                <div class="overview-card">
+                    <div class="overview-icon orange">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3>12</h3>
+                        <p>Pending</p>
+                        <span class="trend">Needs review</span>
+                    </div>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="overview-icon blue">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3>₹45.2L</h3>
+                        <p>Total Earnings</p>
+                        <span class="trend up">+18.5%</span>
+                    </div>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="overview-icon purple">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3>4.8</h3>
+                        <p>Avg Rating</p>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                <div class="pagination">
-                    <button class="page-btn" onclick="changePage('prev')"><i class="fas fa-chevron-left"></i></button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn" onclick="changePage(2)">2</button>
-                    <button class="page-btn" onclick="changePage(3)">3</button>
-                    <button class="page-btn" onclick="changePage(4)">4</button>
-                    <button class="page-btn" onclick="changePage(5)">5</button>
-                    <button class="page-btn" onclick="changePage('next')"><i class="fas fa-chevron-right"></i></button>
+            <!-- Filters & View Toggle -->
+            <div class="toolbar">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all" onclick="filterHosts('all')">
+                        All Hosts <span class="count">89</span>
+                    </button>
+                    <button class="filter-tab" data-filter="verified" onclick="filterHosts('verified')">
+                        Verified <span class="count">72</span>
+                    </button>
+                    <button class="filter-tab" data-filter="pending" onclick="filterHosts('pending')">
+                        Pending <span class="count">12</span>
+                    </button>
+                    <button class="filter-tab" data-filter="suspended" onclick="filterHosts('suspended')">
+                        Suspended <span class="count">5</span>
+                    </button>
+                </div>
+                
+                <div class="toolbar-actions">
+                    <div class="sort-dropdown">
+                        <select id="sortHosts" onchange="sortHosts()">
+                            <option value="recent">Recently Active</option>
+                            <option value="earnings">Top Earners</option>
+                            <option value="rating">Highest Rated</option>
+                            <option value="events">Most Events</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    
+                    <div class="view-toggle">
+                        <button class="toggle-btn active" onclick="toggleView('grid')" title="Grid View">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="toggle-btn" onclick="toggleView('list')" title="List View">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bulk Actions -->
+            <div class="bulk-bar" id="bulkBar" style="display: none;">
+                <div class="bulk-info">
+                    <i class="fas fa-check-square"></i>
+                    <span><strong id="selectedCount">0</strong> hosts selected</span>
+                </div>
+                <div class="bulk-buttons">
+                    <button class="btn btn-sm btn-secondary" onclick="bulkVerify()">
+                        <i class="fas fa-check"></i> Verify
+                    </button>
+                    <button class="btn btn-sm btn-secondary" onclick="bulkMessage()">
+                        <i class="fas fa-envelope"></i> Message
+                    </button>
+                    <button class="btn btn-sm btn-warning" onclick="bulkSuspend()">
+                        <i class="fas fa-ban"></i> Suspend
+                    </button>
+                    <button class="btn btn-sm btn-ghost" onclick="clearSelection()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hosts Grid -->
+            <div class="hosts-grid" id="hostsGrid">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Hosts List View -->
+            <div class="hosts-list" id="hostsList" style="display: none;">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-wrap">
+                <div class="showing-text">
+                    Showing <span id="showStart">1</span>-<span id="showEnd">12</span> of <span id="showTotal">89</span> hosts
+                </div>
+                <div class="pagination" id="pagination">
+                    <!-- Populated by JS -->
                 </div>
             </div>
         </div>
     </main>
 
-    <script src="js/users.js"></script>
+    <!-- Host Detail Modal -->
+    <div class="modal" id="hostModal">
+        <div class="modal-overlay" onclick="closeModal()"></div>
+        <div class="modal-content host-modal">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body" id="modalBody">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification Queue Modal -->
+    <div class="modal" id="verificationModal">
+        <div class="modal-overlay" onclick="closeVerificationModal()"></div>
+        <div class="modal-content verification-modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-check"></i> Verification Queue</h2>
+                <button class="modal-close" onclick="closeVerificationModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="verification-list" id="verificationList">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/hosts.js"></script>
 </body>
 </html>
