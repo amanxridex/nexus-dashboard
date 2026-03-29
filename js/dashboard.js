@@ -23,8 +23,49 @@ document.addEventListener('DOMContentLoaded', () => {
     loadActivityFeed();
     loadTopFests();
     initMobileMenu();
-    startRealTimeUpdates();
+    fetchDashboardStats();
 });
+
+async function fetchDashboardStats() {
+    try {
+        const res = await fetch(`${window.API_BASE_URL}/dashboard/stats`);
+        const result = await res.json();
+        if (result.success) {
+            const data = result.data;
+            animateValue('totalUsers', parseInt(document.getElementById('totalUsers').innerText.replace(/,/g, '')) || 0, data.totalUsers || 0, 1500);
+            animateValue('activeHosts', parseInt(document.getElementById('activeHosts').innerText.replace(/,/g, '')) || 0, data.activeHosts || 0, 1500);
+            animateValue('liveFests', parseInt(document.getElementById('liveFests').innerText.replace(/,/g, '')) || 0, data.liveFests || 0, 1500);
+            
+            const revElem = document.getElementById('totalRevenue');
+            if (data.totalRevenue) {
+                if (data.totalRevenue >= 100000) {
+                    revElem.textContent = '₹' + (data.totalRevenue / 100000).toFixed(2) + 'L';
+                } else if (data.totalRevenue > 0) {
+                    revElem.textContent = '₹' + data.totalRevenue.toLocaleString();
+                } else {
+                    revElem.textContent = '₹0';
+                }
+            }
+        }
+    } catch (err) {
+        console.error("Failed to load real dashboard stats:", err);
+    }
+}
+
+function animateValue(id, start, end, duration) {
+    const obj = document.getElementById(id);
+    if (!obj) return;
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString();
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
+}
 
 // Charts
 function initCharts() {
@@ -212,19 +253,7 @@ function loadTopFests() {
     `).join('');
 }
 
-// Real-time Updates Simulation
-function startRealTimeUpdates() {
-    setInterval(() => {
-        // Randomly update stats
-        const stats = ['totalUsers', 'activeHosts', 'liveFests', 'totalRevenue'];
-        const stat = stats[Math.floor(Math.random() * stats.length)];
-        const element = document.getElementById(stat);
-        if (element) {
-            element.style.transform = 'scale(1.1)';
-            setTimeout(() => element.style.transform = 'scale(1)', 200);
-        }
-    }, 5000);
-}
+// Remove simulated startRealTimeUpdates since we have real API calls.
 
 // Navigation Actions
 function refreshDashboard() {

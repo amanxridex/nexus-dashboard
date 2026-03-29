@@ -3,212 +3,8 @@
 // ============================================
 
 // Mock Hosts Data
-const hostsData = [
-    {
-        id: 1,
-        name: "Rahul Verma",
-        email: "rahul.v@iitd.ac.in",
-        college: "IIT Delhi",
-        avatar: "RV",
-        status: "verified",
-        eventsHosted: 12,
-        totalEarnings: 245000,
-        rating: 4.9,
-        totalBookings: 1250,
-        joined: "2023-08-15",
-        phone: "+91 98765 43210",
-        department: "Computer Science",
-        year: "3rd Year",
-        bio: "Passionate about organizing technical fests and hackathons. Led TechFest 2024 with 5000+ participants."
-    },
-    {
-        id: 2,
-        name: "Priya Sharma",
-        email: "priya.s@bits-pilani.ac.in",
-        college: "BITS Pilani",
-        avatar: "PS",
-        status: "verified",
-        eventsHosted: 8,
-        totalEarnings: 189000,
-        rating: 4.8,
-        totalBookings: 980,
-        joined: "2023-09-20",
-        phone: "+91 98765 43211",
-        department: "Electronics",
-        year: "4th Year",
-        bio: "Cultural fest coordinator with expertise in managing large-scale events and artist bookings."
-    },
-    {
-        id: 3,
-        name: "Amit Kumar",
-        email: "amit.k@iitb.ac.in",
-        college: "IIT Bombay",
-        avatar: "AK",
-        status: "verified",
-        eventsHosted: 15,
-        totalEarnings: 320000,
-        rating: 4.9,
-        totalBookings: 2100,
-        joined: "2023-07-10",
-        phone: "+91 98765 43212",
-        department: "Mechanical",
-        year: "4th Year",
-        bio: "Founder of Mood Indigo Tech Team. Specializes in sponsorship and corporate relations."
-    },
-    {
-        id: 4,
-        name: "Sneha Patel",
-        email: "sneha.p@vit.ac.in",
-        college: "VIT Vellore",
-        avatar: "SP",
-        status: "pending",
-        eventsHosted: 0,
-        totalEarnings: 0,
-        rating: 0,
-        totalBookings: 0,
-        joined: "2024-01-25",
-        phone: "+91 98765 43213",
-        department: "Business",
-        year: "2nd Year",
-        bio: "New host applicant looking to organize cultural events and workshops."
-    },
-    {
-        id: 5,
-        name: "Rohan Mehta",
-        email: "rohan.m@manipal.edu",
-        college: "Manipal",
-        avatar: "RM",
-        status: "verified",
-        eventsHosted: 6,
-        totalEarnings: 145000,
-        rating: 4.7,
-        totalBookings: 720,
-        joined: "2023-10-05",
-        phone: "+91 98765 43214",
-        department: "Civil",
-        year: "3rd Year",
-        bio: "Sports fest coordinator. Organized inter-college tournaments with 50+ colleges participation."
-    },
-    {
-        id: 6,
-        name: "Ananya Gupta",
-        email: "ananya.g@iitkgp.ac.in",
-        college: "IIT Kharagpur",
-        avatar: "AG",
-        status: "verified",
-        eventsHosted: 9,
-        totalEarnings: 198000,
-        rating: 4.8,
-        totalBookings: 1100,
-        joined: "2023-08-22",
-        phone: "+91 98765 43215",
-        department: "Chemical",
-        year: "4th Year",
-        bio: "Literary fest head. Conducted poetry slams, debates, and writing workshops."
-    },
-    {
-        id: 7,
-        name: "Vikram Rao",
-        email: "vikram.r@nitt.edu",
-        college: "NIT Trichy",
-        avatar: "VR",
-        status: "suspended",
-        eventsHosted: 3,
-        totalEarnings: 45000,
-        rating: 3.2,
-        totalBookings: 180,
-        joined: "2023-11-15",
-        phone: "+91 98765 43216",
-        department: "ECE",
-        year: "3rd Year",
-        bio: "Account suspended due to policy violations. Under review."
-    },
-    {
-        id: 8,
-        name: "Neha Reddy",
-        email: "neha.r@bits-goa.ac.in",
-        college: "BITS Goa",
-        avatar: "NR",
-        status: "verified",
-        eventsHosted: 11,
-        totalEarnings: 234000,
-        rating: 4.9,
-        totalBookings: 1400,
-        joined: "2023-09-12",
-        phone: "+91 98765 43217",
-        department: "Computer Science",
-        year: "4th Year",
-        bio: "Full-stack developer and event manager. Organized Goa' s largest student hackathon."
-    },
-    {
-        id: 9,
-        name: "Karan Malhotra",
-        email: "karan.m@iitm.ac.in",
-        college: "IIT Madras",
-        avatar: "KM",
-        status: "pending",
-        eventsHosted: 0,
-        totalEarnings: 0,
-        rating: 0,
-        totalBookings: 0,
-        joined: "2024-02-10",
-        phone: "+91 98765 43218",
-        department: "Aerospace",
-        year: "2nd Year",
-        bio: "Aspiring event manager. Looking to organize technical workshops and seminars."
-    },
-    {
-        id: 10,
-        name: "Divya Nair",
-        email: "divya.n@nitw.ac.in",
-        college: "NIT Warangal",
-        avatar: "DN",
-        status: "verified",
-        eventsHosted: 14,
-        totalEarnings: 278000,
-        rating: 4.8,
-        totalBookings: 1650,
-        joined: "2023-07-28",
-        phone: "+91 98765 43219",
-        department: "IT",
-        year: "4th Year",
-        bio: "Fest coordinator for 3 consecutive years. Expert in logistics and crowd management."
-    },
-    {
-        id: 11,
-        name: "Arjun Verma",
-        email: "arjun.v@iitd.ac.in",
-        college: "IIT Delhi",
-        avatar: "AV",
-        status: "verified",
-        eventsHosted: 7,
-        totalEarnings: 156000,
-        rating: 4.6,
-        totalBookings: 890,
-        joined: "2023-10-18",
-        phone: "+91 98765 43220",
-        department: "Electrical",
-        year: "3rd Year",
-        bio: "Music fest organizer. Brought international artists to campus events."
-    },
-    {
-        id: 12,
-        name: "Shreya Iyer",
-        email: "shreya.i@bits-pilani.ac.in",
-        college: "BITS Pilani",
-        avatar: "SI",
-        status: "pending",
-        eventsHosted: 0,
-        totalEarnings: 0,
-        rating: 0,
-        totalBookings: 0,
-        joined: "2024-02-15",
-        phone: "+91 98765 43221",
-        department: "Biology",
-        year: "2nd Year",
-        bio: "Science fest enthusiast. Wants to organize research symposiums and science exhibitions."
-    }
-];
+// Data State
+let hostsData = [];
 
 // State
 let currentView = 'grid';
@@ -220,11 +16,45 @@ const itemsPerPage = 9;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    renderHosts();
     initEventListeners();
     initMobileMenu();
-    updateStats();
+    fetchHosts();
 });
+
+async function fetchHosts() {
+    try {
+        const res = await fetch(`${window.API_BASE_URL}/admin/hosts`);
+        const data = await res.json();
+        if (data.hosts) {
+            hostsData = data.hosts.map(h => {
+                let status = h.verification_status || 'pending';
+                if (status === 'rejected') status = 'suspended';
+                
+                return {
+                    id: h.id,
+                    name: h.full_name || 'Unknown',
+                    email: h.email || 'N/A',
+                    college: h.college_name || 'N/A',
+                    avatar: (h.full_name || 'Unknown').split(' ').map(n=>n[0]).join('').substring(0,2),
+                    status: status,
+                    eventsHosted: 0,
+                    totalEarnings: 0,
+                    rating: 0,
+                    totalBookings: 0,
+                    joined: h.created_at ? h.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
+                    phone: h.phone || 'N/A',
+                    department: h.department || 'N/A',
+                    year: h.year_of_study || 'N/A',
+                    bio: h.bio || 'New host applicant'
+                };
+            });
+            renderHosts();
+            updateStats();
+        }
+    } catch(err) {
+        console.error("Failed to load hosts:", err);
+    }
+}
 
 function initEventListeners() {
     // Search with debounce
@@ -668,26 +498,42 @@ function closeVerificationModal() {
     document.getElementById('verificationModal').classList.remove('active');
 }
 
-function approveHost(id) {
-    const host = hostsData.find(h => h.id === id);
-    if (host) {
-        host.status = 'verified';
-        renderHosts();
-        updateStats();
-        openVerificationQueue(); // Refresh list
-        showToast(`${host.name} approved!`, 'success');
-    }
+async function approveHost(id) {
+    if (!confirm('Approve this host?')) return;
+    try {
+        const res = await fetch(`${window.API_BASE_URL}/admin/hosts/${id}/verification`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ verification_status: 'verified' })
+        });
+        if (res.ok) {
+            showToast('Host approved!', 'success');
+            await fetchHosts();
+            closeVerificationModal();
+        } else {
+            const data = await res.json();
+            showToast(data.error || 'Failed to approve', 'error');
+        }
+    } catch (e) { console.error(e); }
 }
 
-function rejectHost(id) {
-    const host = hostsData.find(h => h.id === id);
-    if (confirm(`Reject ${host.name}'s application?`)) {
-        host.status = 'suspended';
-        renderHosts();
-        updateStats();
-        openVerificationQueue();
-        showToast('Application rejected', 'info');
-    }
+async function rejectHost(id) {
+    if (!confirm("Reject this application?")) return;
+    try {
+        const res = await fetch(`${window.API_BASE_URL}/admin/hosts/${id}/verification`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ verification_status: 'rejected' })
+        });
+        if (res.ok) {
+            showToast('Host application rejected', 'warning');
+            await fetchHosts();
+            closeVerificationModal();
+        } else {
+            const data = await res.json();
+            showToast(data.error || 'Failed to reject', 'error');
+        }
+    } catch (e) { console.error(e); }
 }
 
 // Pagination

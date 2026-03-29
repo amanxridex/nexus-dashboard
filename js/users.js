@@ -3,20 +3,8 @@
 // ============================================
 
 // Mock Data
-const usersData = [
-    { id: 1, name: "Rahul Kumar", email: "rahul@iitd.ac.in", phone: "+91 98765 43210", college: "IIT Delhi", joined: "2024-01-15", bookings: 12, spent: 15400, status: "active", avatar: "RK" },
-    { id: 2, name: "Priya Sharma", email: "priya@bits-pilani.ac.in", phone: "+91 98765 43211", college: "BITS Pilani", joined: "2024-02-20", bookings: 8, spent: 9800, status: "active", avatar: "PS" },
-    { id: 3, name: "Amit Singh", email: "amit@iitb.ac.in", phone: "+91 98765 43212", college: "IIT Bombay", joined: "2024-03-10", bookings: 15, spent: 22100, status: "active", avatar: "AS" },
-    { id: 4, name: "Sneha Patel", email: "sneha@vit.ac.in", phone: "+91 98765 43213", college: "VIT Vellore", joined: "2024-01-25", bookings: 3, spent: 2400, status: "inactive", avatar: "SP" },
-    { id: 5, name: "Rohan Mehta", email: "rohan@manipal.edu", phone: "+91 98765 43214", college: "Manipal", joined: "2024-04-05", bookings: 9, spent: 12500, status: "active", avatar: "RM" },
-    { id: 6, name: "Ananya Gupta", email: "ananya@iitkgp.ac.in", phone: "+91 98765 43215", college: "IIT Kharagpur", joined: "2024-02-14", bookings: 6, spent: 7800, status: "active", avatar: "AG" },
-    { id: 7, name: "Vikram Rao", email: "vikram@nitt.edu", phone: "+91 98765 43216", college: "NIT Trichy", joined: "2024-03-22", bookings: 1, spent: 800, status: "suspended", avatar: "VR" },
-    { id: 8, name: "Neha Reddy", email: "neha@bits-goa.ac.in", phone: "+91 98765 43217", college: "BITS Goa", joined: "2024-01-30", bookings: 11, spent: 14200, status: "active", avatar: "NR" },
-    { id: 9, name: "Karan Malhotra", email: "karan@iitm.ac.in", phone: "+91 98765 43218", college: "IIT Madras", joined: "2024-04-12", bookings: 0, spent: 0, status: "inactive", avatar: "KM" },
-    { id: 10, name: "Divya Nair", email: "divya@nitw.ac.in", phone: "+91 98765 43219", college: "NIT Warangal", joined: "2024-02-28", bookings: 14, spent: 18900, status: "active", avatar: "DN" },
-    { id: 11, name: "Arjun Verma", email: "arjun@iitd.ac.in", phone: "+91 98765 43220", college: "IIT Delhi", joined: "2024-03-15", bookings: 7, spent: 8900, status: "active", avatar: "AV" },
-    { id: 12, name: "Shreya Iyer", email: "shreya@bits-pilani.ac.in", phone: "+91 98765 43221", college: "BITS Pilani", joined: "2024-04-01", bookings: 4, spent: 5600, status: "active", avatar: "SI" }
-];
+// Data State
+let usersData = [];
 
 let currentView = 'grid';
 let selectedUsers = new Set();
@@ -25,10 +13,34 @@ const itemsPerPage = 12;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    renderUsers();
     initEventListeners();
     initMobileMenu();
+    fetchUsers();
 });
+
+async function fetchUsers() {
+    try {
+        const res = await fetch(`${window.API_BASE_URL}/admin/users`);
+        const data = await res.json();
+        if (data.users) {
+            usersData = data.users.map(u => ({
+                id: u.id,
+                name: u.full_name || 'Unknown',
+                email: u.email || 'N/A',
+                phone: u.phone || 'N/A',
+                college: u.college_name || 'N/A',
+                joined: u.created_at ? u.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
+                bookings: 0,
+                spent: 0,
+                status: 'active',
+                avatar: (u.full_name || 'Unknown').split(' ').map(n=>n[0]).join('').substring(0,2)
+            }));
+            renderUsers();
+        }
+    } catch(err) {
+        console.error("Failed to load users:", err);
+    }
+}
 
 function initEventListeners() {
     // Search

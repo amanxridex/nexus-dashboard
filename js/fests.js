@@ -3,179 +3,8 @@
 // ============================================
 
 // Mock Fests Data
-const festsData = [
-    {
-        id: 1,
-        name: "Mood Indigo 2024",
-        college: "IIT Bombay",
-        host: "Amit Kumar",
-        type: "cultural",
-        status: "live",
-        featured: true,
-        startDate: "2024-03-15",
-        endDate: "2024-03-17",
-        banner: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800",
-        totalTickets: 5000,
-        soldTickets: 3420,
-        revenue: 856000,
-        price: 250,
-        attendees: 3200,
-        rating: 4.8,
-        description: "Asia's largest college cultural festival with music, dance, and art events."
-    },
-    {
-        id: 2,
-        name: "TechFest 2024",
-        college: "IIT Delhi",
-        host: "Rahul Verma",
-        type: "technical",
-        status: "upcoming",
-        featured: true,
-        startDate: "2024-03-25",
-        endDate: "2024-03-27",
-        banner: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800",
-        totalTickets: 3000,
-        soldTickets: 1850,
-        revenue: 555000,
-        price: 300,
-        attendees: 0,
-        rating: 0,
-        description: "Annual technical festival featuring hackathons, robotics, and coding competitions."
-    },
-    {
-        id: 3,
-        name: "Oasis 2024",
-        college: "BITS Pilani",
-        host: "Priya Sharma",
-        type: "cultural",
-        status: "live",
-        featured: false,
-        startDate: "2024-03-10",
-        endDate: "2024-03-12",
-        banner: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800",
-        totalTickets: 4000,
-        soldTickets: 3800,
-        revenue: 760000,
-        price: 200,
-        attendees: 3650,
-        rating: 4.9,
-        description: "The cultural fest of BITS Pilani featuring pro-nights and competitions."
-    },
-    {
-        id: 4,
-        name: "Spring Fest 2024",
-        college: "IIT Kharagpur",
-        host: "Ananya Gupta",
-        type: "cultural",
-        status: "completed",
-        featured: false,
-        startDate: "2024-02-20",
-        endDate: "2024-02-22",
-        banner: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800",
-        totalTickets: 3500,
-        soldTickets: 3500,
-        revenue: 700000,
-        price: 200,
-        attendees: 3400,
-        rating: 4.7,
-        description: "Annual cultural festival with star performances and competitive events."
-    },
-    {
-        id: 5,
-        name: "Hackathon 2024",
-        college: "BITS Goa",
-        host: "Neha Reddy",
-        type: "technical",
-        status: "upcoming",
-        featured: false,
-        startDate: "2024-04-05",
-        endDate: "2024-04-07",
-        banner: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800",
-        totalTickets: 800,
-        soldTickets: 620,
-        revenue: 124000,
-        price: 200,
-        attendees: 0,
-        rating: 0,
-        description: "24-hour hackathon with prizes worth ₹5 lakhs."
-    },
-    {
-        id: 6,
-        name: "Sports Meet 2024",
-        college: "Manipal",
-        host: "Rohan Mehta",
-        type: "sports",
-        status: "draft",
-        featured: false,
-        startDate: "2024-04-15",
-        endDate: "2024-04-18",
-        banner: "https://images.unsplash.com/photo-1461896836934- voices-of-children-3273332?w=800",
-        totalTickets: 2000,
-        soldTickets: 0,
-        revenue: 0,
-        price: 150,
-        attendees: 0,
-        rating: 0,
-        description: "Inter-college sports tournament with 15+ events."
-    },
-    {
-        id: 7,
-        name: "Literary Fest",
-        college: "NIT Warangal",
-        host: "Divya Nair",
-        type: "literary",
-        status: "upcoming",
-        featured: false,
-        startDate: "2024-03-28",
-        endDate: "2024-03-30",
-        banner: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800",
-        totalTickets: 1500,
-        soldTickets: 890,
-        revenue: 178000,
-        price: 120,
-        attendees: 0,
-        rating: 0,
-        description: "Celebration of literature with debates, poetry, and writing workshops."
-    },
-    {
-        id: 8,
-        name: "E-Summit 2024",
-        college: "IIT Madras",
-        host: "Arjun Verma",
-        type: "management",
-        status: "cancelled",
-        featured: false,
-        startDate: "2024-03-01",
-        endDate: "2024-03-03",
-        banner: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800",
-        totalTickets: 2500,
-        soldTickets: 450,
-        revenue: 135000,
-        price: 300,
-        attendees: 0,
-        rating: 0,
-        description: "Entrepreneurship summit with keynote speakers and startup showcase."
-    },
-    {
-        id: 9,
-        name: "Rendezvous 2024",
-        college: "IIT Delhi",
-        host: "New Host",
-        type: "cultural",
-        status: "pending",
-        featured: false,
-        startDate: "2024-04-20",
-        endDate: "2024-04-22",
-        banner: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=800",
-        totalTickets: 6000,
-        soldTickets: 0,
-        revenue: 0,
-        price: 350,
-        attendees: 0,
-        rating: 0,
-        description: "Annual cultural festival awaiting approval."
-    }
-];
+// Data State
+let festsData = [];
 
 // State
 let currentView = 'grid';
@@ -188,11 +17,42 @@ const itemsPerPage = 9;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    renderFests();
     initEventListeners();
     initMobileMenu();
-    updateStats();
+    fetchFests();
 });
+
+async function fetchFests() {
+    try {
+        const res = await fetch(`${window.API_BASE_URL}/admin/fests`);
+        const data = await res.json();
+        if (data.fests) {
+            festsData = data.fests.map(f => ({
+                id: f.id,
+                name: f.fest_name,
+                college: f.hosts ? f.hosts.college_name : 'Unknown',
+                host: f.hosts ? f.hosts.full_name : 'Unknown',
+                type: f.category || 'cultural',
+                status: f.status === 'approved' ? 'upcoming' : (f.status === 'rejected' ? 'cancelled' : 'pending'),
+                featured: false,
+                startDate: f.start_date || new Date().toISOString().split('T')[0],
+                endDate: f.end_date || new Date().toISOString().split('T')[0],
+                banner: f.cover_url || "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800",
+                totalTickets: 1000,
+                soldTickets: 0,
+                revenue: 0,
+                price: parseFloat(f.pricing_amount) || 250,
+                attendees: 0,
+                rating: 0,
+                description: f.description || 'No description provided'
+            }));
+            renderFests();
+            updateStats();
+        }
+    } catch(err) {
+        console.error("Failed to load fests:", err);
+    }
+}
 
 function initEventListeners() {
     const searchInput = document.getElementById('festSearch');
@@ -701,26 +561,43 @@ function closeApprovalModal() {
     document.getElementById('approvalModal').classList.remove('active');
 }
 
-function approveFest(id) {
-    const fest = festsData.find(f => f.id === id);
-    if (fest) {
-        fest.status = 'upcoming';
-        renderFests();
-        updateStats();
-        openPendingApprovals();
-        showToast(`${fest.name} approved!`, 'success');
-    }
+async function approveFest(id) {
+    if (!confirm('Approve this fest?')) return;
+    try {
+        const res = await fetch(`${window.API_BASE_URL}/admin/fests/${id}/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'approved' })
+        });
+        if (res.ok) {
+            showToast('Fest approved!', 'success');
+            await fetchFests();
+            closeApprovalModal();
+        } else {
+            const data = await res.json();
+            showToast(data.error || 'Failed to approve', 'error');
+        }
+    } catch (e) { console.error(e); }
 }
 
-function rejectFest(id) {
-    const fest = festsData.find(f => f.id === id);
-    if (confirm(`Reject ${fest.name}?`)) {
-        fest.status = 'cancelled';
-        renderFests();
-        updateStats();
-        openPendingApprovals();
-        showToast('Fest rejected', 'info');
-    }
+async function rejectFest(id) {
+    const reason = prompt('Enter rejection reason:');
+    if (!reason) return;
+    try {
+        const res = await fetch(`${window.API_BASE_URL}/admin/fests/${id}/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'rejected', rejection_reason: reason })
+        });
+        if (res.ok) {
+            showToast('Fest rejected', 'warning');
+            await fetchFests();
+            closeApprovalModal();
+        } else {
+            const data = await res.json();
+            showToast(data.error || 'Failed to reject', 'error');
+        }
+    } catch (e) { console.error(e); }
 }
 
 // Calendar View
