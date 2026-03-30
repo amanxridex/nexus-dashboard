@@ -2,20 +2,7 @@
 // NEXUS ADMIN - DASHBOARD ONLY
 // ============================================
 
-// Mock Data
-const activities = [
-    { type: 'booking', title: 'New booking by Rahul Kumar', time: '2 minutes ago', value: '₹499' },
-    { type: 'user', title: 'New user registered', time: '5 minutes ago', value: null },
-    { type: 'fest', title: 'New fest created by IIT Delhi', time: '12 minutes ago', value: null },
-    { type: 'payment', title: 'Payment received', time: '18 minutes ago', value: '₹1,299' },
-    { type: 'host', title: 'Host verified: Priya Sharma', time: '25 minutes ago', value: null }
-];
-
-const topFests = [
-    { rank: 1, name: 'IIT Bombay - Mood Indigo', college: 'IIT Bombay', revenue: '₹2.4L', bookings: 890 },
-    { rank: 2, name: 'BITS Pilani - Oasis', college: 'BITS Pilani', revenue: '₹1.8L', bookings: 654 },
-    { rank: 3, name: 'IIT Delhi - Rendezvous', college: 'IIT Delhi', revenue: '₹1.5L', bookings: 532 }
-];
+// No mock data - fetching from API
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -204,22 +191,38 @@ function initUserGrowthChart() {
 }
 
 // Activity Feed
-function loadActivityFeed() {
+async function loadActivityFeed() {
     const container = document.getElementById('activityList');
     if (!container) return;
     
-    container.innerHTML = activities.map(activity => `
-        <div class="activity-item" onclick="viewActivity('${activity.type}')">
-            <div class="activity-icon ${activity.type}">
-                <i class="fas ${getActivityIcon(activity.type)}"></i>
+    container.innerHTML = '<div style="padding: 1rem; color: var(--text-muted); text-align: center;">Loading activity...</div>';
+    
+    try {
+        const res = await fetch(`${window.API_BASE_URL}/dashboard/feed`);
+        const data = await res.json();
+        const activities = data.activities || [];
+        
+        if (activities.length === 0) {
+            container.innerHTML = '<div style="padding: 1rem; color: var(--text-muted); text-align: center;">No activity found</div>';
+            return;
+        }
+
+        container.innerHTML = activities.map(activity => `
+            <div class="activity-item" onclick="viewActivity('${activity.type}')">
+                <div class="activity-icon ${activity.type}">
+                    <i class="fas ${getActivityIcon(activity.type)}"></i>
+                </div>
+                <div class="activity-details">
+                    <div class="activity-title">${activity.title}</div>
+                    <div class="activity-time">${new Date(activity.time).toLocaleString()}</div>
+                </div>
+                ${activity.value ? `<div class="activity-value">${activity.value}</div>` : ''}
             </div>
-            <div class="activity-details">
-                <div class="activity-title">${activity.title}</div>
-                <div class="activity-time">${activity.time}</div>
-            </div>
-            ${activity.value ? `<div class="activity-value">${activity.value}</div>` : ''}
-        </div>
-    `).join('');
+        `).join('');
+    } catch (err) {
+        console.error('Failed to load activity feed:', err);
+        container.innerHTML = '<div style="padding: 1rem; color: red; text-align: center;">Failed to load</div>';
+    }
 }
 
 function getActivityIcon(type) {
@@ -234,23 +237,39 @@ function getActivityIcon(type) {
 }
 
 // Top Fests
-function loadTopFests() {
+async function loadTopFests() {
     const container = document.getElementById('topFestsList');
     if (!container) return;
     
-    container.innerHTML = topFests.map(fest => `
-        <div class="fest-item" onclick="viewFestDetails(${fest.rank})">
-            <div class="fest-rank">${fest.rank}</div>
-            <div class="fest-info">
-                <div class="fest-name">${fest.name}</div>
-                <div class="fest-college">${fest.college}</div>
+    container.innerHTML = '<div style="padding: 1rem; color: var(--text-muted); text-align: center;">Loading Top Fests...</div>';
+
+    try {
+        const res = await fetch(`${window.API_BASE_URL}/dashboard/top-fests`);
+        const data = await res.json();
+        const fests = data.topFests || [];
+        
+        if (fests.length === 0) {
+            container.innerHTML = '<div style="padding: 1rem; color: var(--text-muted); text-align: center;">No ranked fests found</div>';
+            return;
+        }
+
+        container.innerHTML = fests.map(fest => `
+            <div class="fest-item" onclick="viewFestDetails('${fest.rank}')">
+                <div class="fest-rank">${fest.rank}</div>
+                <div class="fest-info">
+                    <div class="fest-name">${fest.name}</div>
+                    <div class="fest-college">${fest.college}</div>
+                </div>
+                <div class="fest-stats">
+                    <div class="fest-revenue">${fest.revenue}</div>
+                    <div class="fest-bookings">${fest.bookings} bookings</div>
+                </div>
             </div>
-            <div class="fest-stats">
-                <div class="fest-revenue">${fest.revenue}</div>
-                <div class="fest-bookings">${fest.bookings} bookings</div>
-            </div>
-        </div>
-    `).join('');
+        `).join('');
+    } catch (err) {
+        console.error('Failed to load top fests:', err);
+        container.innerHTML = '<div style="padding: 1rem; color: red; text-align: center;">Failed to load</div>';
+    }
 }
 
 // Remove simulated startRealTimeUpdates since we have real API calls.

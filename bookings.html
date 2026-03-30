@@ -161,7 +161,7 @@
                 <i class="fas fa-chart-line"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="users.html" class="nav-item active">
+            <a href="users.html" class="nav-item">
                 <i class="fas fa-users"></i>
                 <span>Users</span>
                 <span class="badge">2.4K</span>
@@ -176,7 +176,7 @@
                 <span>Fests</span>
                 <span class="badge">156</span>
             </a>
-            <a href="bookings.html" class="nav-item">
+            <a href="bookings.html" class="nav-item active">
                 <i class="fas fa-ticket-alt"></i>
                 <span>Bookings</span>
             </a>
@@ -236,8 +236,8 @@
         <div class="page-content">
             <div class="users-header">
                 <div>
-                    <h1>Users Management</h1>
-                    <p>Manage and monitor all platform users</p>
+                    <h1>Bookings Management</h1>
+                    <p>Track all platform ticket bookings</p>
                 </div>
                 <div class="page-actions">
                     <button class="btn btn-secondary" onclick="exportUsers()">
@@ -259,15 +259,15 @@
                 </div>
                 <div class="mini-stat">
                     <div class="mini-stat-value" style="color: var(--green)">2,103</div>
-                    <div class="mini-stat-label">Active</div>
+                    <div class="mini-stat-label">Successful</div>
                 </div>
                 <div class="mini-stat">
-                    <div class="mini-stat-value" style="color: var(--orange)">348</div>
-                    <div class="mini-stat-label">Inactive</div>
+                    <div class="mini-stat-value" style="color: var(--orange)">0</div>
+                    <div class="mini-stat-label">Pending</div>
                 </div>
                 <div class="mini-stat">
-                    <div class="mini-stat-value" style="color: var(--purple)">156</div>
-                    <div class="mini-stat-label">New Today</div>
+                    <div class="mini-stat-value" style="color: var(--purple)">0</div>
+                    <div class="mini-stat-label">Revenue Generated</div>
                 </div>
             </div>
 
@@ -326,14 +326,13 @@
                         <thead>
                             <tr>
                                 <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                                <th>User</th>
+                                <th>Attendee</th>
                                 <th>Email</th>
-                                <th>College</th>
-                                <th>Joined</th>
-                                <th>Bookings</th>
-                                <th>Spent</th>
+                                <th>Event/College</th>
+                                <th>Booked On</th>
+                                <th>Quantity</th>
+                                <th>Amount</th>
                                 <th>Status</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="usersTableBody">
