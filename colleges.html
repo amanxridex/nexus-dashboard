@@ -422,16 +422,11 @@
                     <div class="form-section">
                         <h4>College Logo</h4>
                         <div class="logo-upload-area">
-                            <div class="logo-preview" id="logoPreview">
+                            <div class="logo-preview" id="logoPreview" style="background-size: cover; background-position: center;">
                                 <i class="fas fa-university"></i>
                             </div>
-                            <div class="logo-upload-actions">
-                                <button type="button" class="btn btn-secondary" onclick="uploadLogo()">
-                                    <i class="fas fa-upload"></i> Upload Logo
-                                </button>
-                                <button type="button" class="btn btn-ghost" onclick="removeLogo()">
-                                    Remove
-                                </button>
+                            <div class="logo-upload-actions" style="flex:1;">
+                                <input type="url" id="collegeImageUrl" placeholder="Paste Image URL here" style="width:100%; padding: 0.5rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white;" oninput="document.getElementById('logoPreview').style.backgroundImage = 'url(' + this.value + ')'; document.getElementById('logoPreview').innerHTML = this.value ? '' : '<i class=\\'fas fa-university\\'></i>';">
                             </div>
                         </div>
                     </div>
