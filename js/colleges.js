@@ -146,7 +146,8 @@ async function saveCollege(event) {
         const result = await res.json();
         
         if (!res.ok) {
-            throw new Error(result.error || 'Failed to save college');
+            const errMsg = typeof result.error === 'string' ? result.error : (result.message || 'Failed to save college');
+            throw new Error(errMsg);
         }
 
         closeCollegeModal();
@@ -204,7 +205,8 @@ async function deleteCollege(id) {
         const result = await res.json();
         
         if (!res.ok) {
-            throw new Error(result.error || 'Failed to delete college');
+            const errMsg = typeof result.error === 'string' ? result.error : (result.message || 'Failed to delete college');
+            throw new Error(errMsg);
         }
         
         if (typeof showToast === 'function') {
