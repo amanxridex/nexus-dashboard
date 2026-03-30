@@ -7,21 +7,45 @@
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     initCharts();
+    fetchAnalytics();
     loadActivityFeed();
     loadTopFests();
     initMobileMenu();
     fetchDashboardStats();
 });
 
+async function fetchAnalytics() {
+    try {
+        const res = await fetch(`${window.API_BASE_URL}/admin/analytics`);
+        const result = await res.json();
+        if (result.analytics) {
+            const data = result.analytics;
+            if (window.revenueChart) {
+                window.revenueChart.data.labels = data.labels;
+                window.revenueChart.data.datasets[0].data = data.revenue;
+                // Update the callback to show proper values if needed
+                window.revenueChart.update();
+            }
+            if (window.userChart) {
+                window.userChart.data.labels = data.labels;
+                window.userChart.data.datasets[0].data = data.users;
+                window.userChart.update();
+            }
+        }
+    } catch (err) {
+        console.error("Failed to load analytics:", err);
+    }
+}
+
 async function fetchDashboardStats() {
     try {
         const res = await fetch(`${window.API_BASE_URL}/dashboard/stats`);
         const result = await res.json();
-        if (result.success) {
-            const data = result.data;
+        const data = result.stats || result.data || result;
+        if (data) {
             animateValue('totalUsers', parseInt(document.getElementById('totalUsers').innerText.replace(/,/g, '')) || 0, data.totalUsers || 0, 1500);
-            animateValue('activeHosts', parseInt(document.getElementById('activeHosts').innerText.replace(/,/g, '')) || 0, data.activeHosts || 0, 1500);
-            animateValue('liveFests', parseInt(document.getElementById('liveFests').innerText.replace(/,/g, '')) || 0, data.liveFests || 0, 1500);
+            animateValue('activeHosts', parseInt(document.getElementById('activeHosts').innerText.replace(/,/g, '')) || 0, data.totalHosts || 0, 1500);
+            animateValue('liveFests', parseInt(document.getElementById('liveFests').innerText.replace(/,/g, '')) || 0, data.totalFests || 0, 1500);
             
             const revElem = document.getElementById('totalRevenue');
             if (data.totalRevenue) {
@@ -67,10 +91,10 @@ function initRevenueChart() {
     window.revenueChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            labels: [],
             datasets: [{
                 label: 'Revenue',
-                data: [45000, 52000, 48000, 61000, 55000, 67000, 72000],
+                data: [],
                 borderColor: '#6366f1',
                 backgroundColor: (context) => {
                     const ctx = context.chart.ctx;
@@ -144,10 +168,10 @@ function initUserGrowthChart() {
     window.userChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            labels: [],
             datasets: [{
                 label: 'New Users',
-                data: [45, 58, 42, 65, 52, 78, 85],
+                data: [],
                 backgroundColor: (context) => {
                     const ctx = context.chart.ctx;
                     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
@@ -302,18 +326,13 @@ function viewFestDetails(rank) {
 
 function updateRevenueChart(period) {
     if (window.revenueChart) {
-        // Simulate data update
-        const newData = Array.from({length: 7}, () => Math.floor(Math.random() * 50000) + 30000);
-        window.revenueChart.data.datasets[0].data = newData;
-        window.revenueChart.update('active');
+        console.log('Update chart period to:', period);
     }
 }
 
 function updateUserChart(period) {
     if (window.userChart) {
-        const newData = Array.from({length: 7}, () => Math.floor(Math.random() * 50) + 20);
-        window.userChart.data.datasets[0].data = newData;
-        window.userChart.update('active');
+        console.log('Update chart period to:', period);
     }
 }
 

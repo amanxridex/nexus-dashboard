@@ -24,28 +24,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchFests() {
     try {
-        const res = await fetch(`${window.API_BASE_URL}/admin/fests`);
-        const data = await res.json();
+        const [festsRes, bookingsRes] = await Promise.all([
+            fetch(`${window.API_BASE_URL}/admin/fests`),
+            fetch(`${window.API_BASE_URL}/admin/bookings`)
+        ]);
+        const data = await festsRes.json();
+        const bookingsData = await bookingsRes.json();
+        const allBookings = bookingsData.bookings || [];
+        
         if (data.fests) {
-            festsData = data.fests.map(f => ({
-                id: f.id,
-                name: f.fest_name,
-                college: f.hosts ? f.hosts.college_name : 'Unknown',
-                host: f.hosts ? f.hosts.full_name : 'Unknown',
-                type: f.category || 'cultural',
-                status: f.status === 'approved' ? 'upcoming' : (f.status === 'rejected' ? 'cancelled' : 'pending'),
-                featured: false,
-                startDate: f.start_date || new Date().toISOString().split('T')[0],
-                endDate: f.end_date || new Date().toISOString().split('T')[0],
-                banner: f.cover_url || "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800",
-                totalTickets: 1000,
-                soldTickets: 0,
-                revenue: 0,
-                price: parseFloat(f.pricing_amount) || 250,
-                attendees: 0,
-                rating: 0,
-                description: f.description || 'No description provided'
-            }));
+            festsData = data.fests.map(f => {
+                const festBookings = allBookings.filter(b => b.fest_id === f.id);
+                const soldTickets = festBookings.length;
+                const revenue = festBookings.reduce((sum, b) => sum + (parseFloat(b.total_amount) || 0), 0);
+                
+                return {
+                    id: f.id,
+                    name: f.fest_name,
+                    college: f.hosts ? f.hosts.college_name : 'Unknown',
+                    host: f.hosts ? f.hosts.full_name : 'Unknown',
+                    type: f.category || 'cultural',
+                    status: f.status === 'approved' ? 'upcoming' : (f.status === 'rejected' ? 'cancelled' : 'pending'),
+                    featured: false,
+                    startDate: f.start_date || new Date().toISOString().split('T')[0],
+                    endDate: f.end_date || new Date().toISOString().split('T')[0],
+                    banner: f.cover_url || "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800",
+                    totalTickets: 1000, // Or whatever real limit if exists from f.capacity
+                    soldTickets: soldTickets,
+                    revenue: revenue,
+                    price: parseFloat(f.pricing_amount) || 250,
+                    attendees: soldTickets, // Approximate attendees to sold tickets
+                    rating: 0,
+                    description: f.description || 'No description provided'
+                };
+            });
             renderFests();
             updateStats();
         }
@@ -705,13 +717,39 @@ function updateStats() {
     const draft = festsData.filter(f => f.status === 'draft').length;
     const cancelled = festsData.filter(f => f.status === 'cancelled').length;
     
-    // Update tab counts
-    document.querySelector('[data-filter="all"] .count').textContent = total;
-    document.querySelector('[data-filter="live"] .count').textContent = live;
-    document.querySelector('[data-filter="upcoming"] .count').textContent = upcoming;
-    document.querySelector('[data-filter="completed"] .count').textContent = completed;
-    document.querySelector('[data-filter="draft"] .count').textContent = draft;
-    document.querySelector('[data-filter="cancelled"] .count').textContent = cancelled;
+    // Update tab counts safely
+    const tabAll = document.querySelector('[data-filter="all"] .count');
+    const tabLive = document.querySelector('[data-filter="live"] .count');
+    const tabUpcoming = document.querySelector('[data-filter="upcoming"] .count');
+    const tabCompleted = document.querySelector('[data-filter="completed"] .count');
+    const tabDraft = document.querySelector('[data-filter="draft"] .count');
+    const tabCancelled = document.querySelector('[data-filter="cancelled"] .count');
+
+    if(tabAll) tabAll.textContent = total;
+    if(tabLive) tabLive.textContent = live;
+    if(tabUpcoming) tabUpcoming.textContent = upcoming;
+    if(tabCompleted) tabCompleted.textContent = completed;
+    if(tabDraft) tabDraft.textContent = draft;
+    if(tabCancelled) tabCancelled.textContent = cancelled;
+
+    // Update Big Stats
+    const statTotalFests = document.getElementById('statTotalFests');
+    const statLiveNow = document.getElementById('statLiveNow');
+    const statUpcomingFests = document.getElementById('statUpcomingFests');
+    const statCompletedFests = document.getElementById('statCompletedFests');
+    const statTicketsSold = document.getElementById('statTicketsSold');
+    const statTotalRevenue = document.getElementById('statTotalRevenue');
+
+    if (statTotalFests) statTotalFests.innerText = total;
+    if (statLiveNow) statLiveNow.innerText = live;
+    if (statUpcomingFests) statUpcomingFests.innerText = upcoming;
+    if (statCompletedFests) statCompletedFests.innerText = completed;
+    
+    if (statTicketsSold) statTicketsSold.innerText = festsData.reduce((sum, f) => sum + (f.soldTickets || 0), 0) + 'K';
+    if (statTotalRevenue) {
+        let rev = festsData.reduce((sum, f) => sum + (f.revenue || 0), 0);
+        statTotalRevenue.innerText = '₹' + rev.toLocaleString('en-IN');
+    }
 }
 
 // Utilities

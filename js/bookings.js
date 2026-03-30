@@ -19,6 +19,34 @@ async function fetchBookings() {
         }
 
         currentBookings = data.bookings || [];
+        
+        // Update Stats
+        const statTotalUsers = document.getElementById('statTotalUsers');
+        const statTotalBookings = document.getElementById('statTotalBookings');
+        const statPendingBookings = document.getElementById('statPendingBookings');
+        const statRevenueGenerated = document.getElementById('statRevenueGenerated');
+
+        if (statTotalUsers) {
+            // Count unique users
+            const uniqueUsers = new Set(currentBookings.map(b => b.attendee_email)).size;
+            statTotalUsers.innerText = uniqueUsers;
+        }
+
+        if (statTotalBookings) {
+            statTotalBookings.innerText = currentBookings.filter(b => b.payment_status === 'COMPLETED').length;
+        }
+
+        if (statPendingBookings) {
+            statPendingBookings.innerText = currentBookings.filter(b => b.payment_status !== 'COMPLETED').length;
+        }
+
+        if (statRevenueGenerated) {
+            const revenue = currentBookings
+                .filter(b => b.payment_status === 'COMPLETED')
+                .reduce((sum, b) => sum + (Number(b.total_amount) || 0), 0);
+            statRevenueGenerated.innerText = '₹' + revenue.toLocaleString('en-IN');
+        }
+
         renderBookings();
     } catch (err) {
         console.error('Failed to load bookings:', err);

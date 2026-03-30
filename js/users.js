@@ -20,21 +20,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchUsers() {
     try {
-        const res = await fetch(`${window.API_BASE_URL}/admin/users`);
-        const data = await res.json();
+        const [usersRes, bookingsRes] = await Promise.all([
+            fetch(`${window.API_BASE_URL}/admin/users`),
+            fetch(`${window.API_BASE_URL}/admin/bookings`)
+        ]);
+        const data = await usersRes.json();
+        const bookingsData = await bookingsRes.json();
+        const allBookings = bookingsData.bookings || [];
+        
         if (data.users) {
-            usersData = data.users.map(u => ({
-                id: u.id,
-                name: u.full_name || 'Unknown',
-                email: u.email || 'N/A',
-                phone: u.phone || 'N/A',
-                college: u.college_name || 'N/A',
-                joined: u.created_at ? u.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
-                bookings: 0,
-                spent: 0,
-                status: 'active',
-                avatar: (u.full_name || 'Unknown').split(' ').map(n=>n[0]).join('').substring(0,2)
-            }));
+            usersData = data.users.map(u => {
+                const userBookings = allBookings.filter(b => b.attendee_id === u.id);
+                const totalSpent = userBookings.reduce((sum, b) => sum + (parseFloat(b.total_amount) || 0), 0);
+                
+                return {
+                    id: u.id,
+                    name: u.full_name || 'Unknown',
+                    email: u.email || 'N/A',
+                    phone: u.phone || 'N/A',
+                    college: u.college_name || 'N/A',
+                    joined: u.created_at ? u.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
+                    bookings: userBookings.length,
+                    spent: totalSpent,
+                    status: 'active',
+                    avatar: (u.full_name || 'Unknown').split(' ').map(n=>n[0]).join('').substring(0,2)
+                };
+            });
+
+            // Update Stats
+            const statTotal = document.getElementById('statTotalUsers');
+            const statActive = document.getElementById('statActiveUsers');
+            const statInactive = document.getElementById('statInactiveUsers');
+            const statNewToday = document.getElementById('statNewToday');
+
+            if (statTotal) statTotal.innerText = usersData.length;
+            if (statActive) {
+                statActive.innerText = usersData.filter(u => u.status === 'active').length;
+            }
+            if (statInactive) {
+                statInactive.innerText = usersData.filter(u => u.status !== 'active').length;
+            }
+            if (statNewToday) {
+                const today = new Date().toISOString().split('T')[0];
+                statNewToday.innerText = usersData.filter(u => u.joined === today).length;
+            }
+
             renderUsers();
         }
     } catch(err) {

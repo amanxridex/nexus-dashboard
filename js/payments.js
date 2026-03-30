@@ -19,6 +19,33 @@ async function fetchPayments() {
         }
 
         currentPayments = data.payments || [];
+        
+        // Update Stats
+        const statTotalUsers = document.getElementById('statTotalUsers');
+        const statSuccessful = document.getElementById('statSuccessfulTransactions');
+        const statPending = document.getElementById('statPendingTransactions');
+        const statRevenue = document.getElementById('statTotalRevenue');
+
+        if (statTotalUsers) {
+            const uniqueUsers = new Set(currentPayments.filter(p => p.attendee_email).map(p => p.attendee_email)).size;
+            statTotalUsers.innerText = uniqueUsers;
+        }
+
+        if (statSuccessful) {
+            statSuccessful.innerText = currentPayments.filter(p => p.payment_status === 'COMPLETED').length;
+        }
+
+        if (statPending) {
+            statPending.innerText = currentPayments.filter(p => p.payment_status !== 'COMPLETED').length;
+        }
+
+        if (statRevenue) {
+            const revenue = currentPayments
+                .filter(p => p.payment_status === 'COMPLETED')
+                .reduce((sum, p) => sum + (Number(p.total_amount) || 0), 0);
+            statRevenue.innerText = '₹' + revenue.toLocaleString('en-IN');
+        }
+
         renderPayments();
     } catch (err) {
         console.error('Failed to load payments:', err);

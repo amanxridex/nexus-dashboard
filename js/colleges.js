@@ -19,6 +19,34 @@ async function fetchColleges() {
         }
 
         currentColleges = data.colleges || [];
+        
+        // Update Stats
+        const statTotal = document.getElementById('statTotalColleges');
+        const statIITs = document.getElementById('statTotalIITs');
+        const statBITS = document.getElementById('statTotalBITS');
+        const statNITs = document.getElementById('statTotalNITs');
+        const statVerified = document.getElementById('statVerifiedColleges');
+        const statStudents = document.getElementById('statTotalStudents');
+
+        if (statTotal) statTotal.innerText = currentColleges.length;
+        if (statIITs) {
+            statIITs.innerText = currentColleges.filter(c => c.name && c.name.toLowerCase().includes('iit')).length;
+        }
+        if (statBITS) {
+            statBITS.innerText = currentColleges.filter(c => c.name && c.name.toLowerCase().includes('bits')).length;
+        }
+        if (statNITs) {
+            statNITs.innerText = currentColleges.filter(c => c.name && c.name.toLowerCase().includes('nit')).length;
+        }
+        if (statVerified) {
+            // Treat all as verified for now or add a custom flag check if needed
+            statVerified.innerText = currentColleges.length;
+        }
+        if (statStudents) {
+            // Proxy value unless actual total student metric exists
+            statStudents.innerText = '0';
+        }
+
         renderColleges();
     } catch (err) {
         console.error('Failed to load colleges:', err);
