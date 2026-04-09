@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 responseMsg.innerText = msg;
                 form.reset();
                 specificContainer.style.display = 'none';
+                loadHistory(); // Refresh table
             } else {
                 responseMsg.style.color = '#ef4444'; // Red
                 responseMsg.innerText = data.message || 'Failed to send notification.';
@@ -67,4 +68,43 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Shoot Notification';
         }
     });
+
+    const loadHistory = async () => {
+        const tbody = document.getElementById('historyTableBody');
+        try {
+            const res = await fetch(`${window.API_BASE_URL}/admin/notifications/history`);
+            const data = await res.json();
+            if (data.success && data.data.length > 0) {
+                tbody.innerHTML = '';
+                data.data.forEach(n => {
+                    const date = new Date(n.created_at).toLocaleString();
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = '1px solid var(--border-color)';
+                    tr.innerHTML = `
+                        <td style="padding: 12px; font-size: 13px;">${date}</td>
+                        <td style="padding: 12px;"><strong>${n.title}</strong><div style="font-size:12px;color:var(--text-muted);">${n.body.length > 50 ? n.body.substring(0,50)+'...' : n.body}</div></td>
+                        <td style="padding: 12px;"><span style="background:var(--primary-color);color:white;padding:3px 8px;border-radius:12px;font-size:11px;">${n.audience}</span></td>
+                        <td style="padding: 12px; font-size: 13px;">${n.type || 'system'}</td>
+                        <td style="padding: 12px; font-size: 12px; font-family: monospace;">${n.target || 'N/A'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--text-muted);">No notifications sent yet.</td></tr>';
+            }
+        } catch (e) {
+            console.error("Failed to load history", e);
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: #ef4444;">Failed to load history.</td></tr>';
+        }
+    };
+
+    const refreshBtn = document.getElementById('refreshHistoryBtn');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+            refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            loadHistory().then(() => refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh');
+        });
+    }
+
+    loadHistory();
 });
