@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadHistory = async () => {
         const tbody = document.getElementById('historyTableBody');
         try {
-            const res = await fetch(`${window.API_BASE_URL}/admin/notifications/history`);
+            const res = await fetch(`${window.API_BASE_URL}/admin/notifications/history?t=${new Date().getTime()}`);
             const data = await res.json();
             if (data.success && data.data.length > 0) {
                 tbody.innerHTML = '';
@@ -80,12 +80,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     const date = new Date(n.created_at).toLocaleString();
                     const tr = document.createElement('tr');
                     tr.style.borderBottom = '1px solid var(--border-color)';
+                    
+                    let linkHtml = '';
+                    if (n.broadcast_id && n.count > 1) {
+                         linkHtml = `<br><a href="notification-details.html?id=${encodeURIComponent(n.broadcast_id)}" style="color:var(--primary-color); text-decoration:none; font-size:11px; margin-top:4px; display:inline-block;"><i class="fas fa-external-link-alt"></i> View Details</a>`;
+                    }
+
                     tr.innerHTML = `
                         <td style="padding: 12px; font-size: 13px;">${date}</td>
                         <td style="padding: 12px;"><strong>${n.title}</strong><div style="font-size:12px;color:var(--text-muted);">${n.body.length > 50 ? n.body.substring(0,50)+'...' : n.body}</div></td>
                         <td style="padding: 12px;"><span style="background:var(--primary-color);color:white;padding:3px 8px;border-radius:12px;font-size:11px;">${n.audience}</span></td>
                         <td style="padding: 12px; font-size: 13px;">${n.type || 'system'}</td>
-                        <td style="padding: 12px; font-size: 12px; font-family: monospace;">${n.target || 'N/A'}</td>
+                        <td style="padding: 12px; font-size: 12px; font-family: monospace;">
+                            ${n.target || 'N/A'}
+                            ${linkHtml}
+                        </td>
                     `;
                     tbody.appendChild(tr);
                 });
