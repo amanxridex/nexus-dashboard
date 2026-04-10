@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('nexus_admin_lockout');
     }
 
-    // 2. Initialize 12 Second Kill Switch
-    let timeLeft = 12.0;
+    // 2. Initialize 30 Second Kill Switch
+    let timeLeft = 30.0;
     const countdownEl = document.getElementById('countdown');
     let timerId = null;
 
