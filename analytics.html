@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users | NEXUS Admin</title>
+    <title>Analytics | NEXUS Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/index.css">
     <style>
-        /* Users Page Specific Styles */
         .users-header {
             display: flex;
             justify-content: space-between;
@@ -17,66 +16,36 @@
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--border-color);
         }
-        
         .users-stats {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
             gap: 1rem;
             margin-bottom: 2rem;
         }
-        
         .mini-stat {
             background: rgba(26, 26, 26, 0.6);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            padding: 1rem;
+            padding: 1.5rem;
             text-align: center;
             transition: all 0.3s ease;
         }
-        
         .mini-stat:hover {
             transform: translateY(-2px);
             border-color: var(--purple);
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.15);
         }
-        
         .mini-stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.8rem;
+            font-weight: 800;
             color: var(--text-primary);
         }
-        
         .mini-stat-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 0.25rem;
-        }
-        
-        .filters-bar {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--bg-tertiary);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-        
-        .filter-group select {
-            background: transparent;
-            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
             color: var(--text-primary);
-            outline: none;
-            cursor: pointer;
+            margin-top: 0.5rem;
         }
-        
         .users-table-container {
             background: rgba(26, 26, 26, 0.6);
             backdrop-filter: blur(20px);
@@ -84,67 +53,19 @@
             border-radius: 16px;
             overflow: hidden;
         }
-        
-        .table-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
-        
-        .bulk-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-        
-        .page-btn {
-            width: 36px;
-            height: 36px;
-            border: 1px solid var(--border-color);
-            background: transparent;
-            color: var(--text-secondary);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .page-btn:hover, .page-btn.active {
-            background: var(--purple);
-            border-color: var(--purple);
-            color: white;
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-        
-        tr:hover .user-avatar {
-            border-color: var(--purple);
-            transform: scale(1.1);
-        }
-        
         @media (max-width: 768px) {
-            .users-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .users-stats { grid-template-columns: repeat(2, 1fr) !important; }
+            #charts-grid { grid-template-columns: 1fr !important; }
+            .users-table-container { grid-column: span 1 !important; }
         }
     </style>
 </head>
 <body>
-    <!-- Same Sidebar as Dashboard -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
@@ -155,7 +76,6 @@
                 <i class="fas fa-bars"></i>
             </button>
         </div>
-
         <nav class="sidebar-nav">
             <a href="index.html" class="nav-item">
                 <i class="fas fa-chart-line"></i>
@@ -164,17 +84,14 @@
             <a href="users.html" class="nav-item">
                 <i class="fas fa-users"></i>
                 <span>Users</span>
-                <span class="badge"></span>
             </a>
             <a href="hosts.html" class="nav-item">
                 <i class="fas fa-user-tie"></i>
                 <span>Hosts</span>
-                <span class="badge"></span>
             </a>
             <a href="fests.html" class="nav-item">
                 <i class="fas fa-calendar-alt"></i>
                 <span>Fests</span>
-                <span class="badge"></span>
             </a>
             <a href="bookings.html" class="nav-item">
                 <i class="fas fa-ticket-alt"></i>
@@ -188,16 +105,15 @@
                 <i class="fas fa-chart-pie"></i>
                 <span>Analytics</span>
             </a>
-                        <a href="notifications.html" class="nav-item">
+            <a href="notifications.html" class="nav-item">
                 <i class="fas fa-bell"></i>
                 <span>Notifications</span>
             </a>
-<a href="settings.html" class="nav-item">
+            <a href="settings.html" class="nav-item">
                 <i class="fas fa-cog"></i>
                 <span>Settings</span>
             </a>
         </nav>
-
         <div class="sidebar-footer">
             <div class="admin-profile">
                 <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Admin">
@@ -220,17 +136,10 @@
                 </button>
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search users..." id="userSearch">
+                    <input type="text" placeholder="Search analytics..." id="userSearch">
                 </div>
             </div>
             <div class="topbar-right">
-                <button class="icon-btn" data-tooltip="Add User" onclick="addNewUser()">
-                    <i class="fas fa-plus"></i>
-                </button>
-                <button class="icon-btn" onclick="toggleNotifications()">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-dot"></span>
-                </button>
                 <div class="user-menu">
                     <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Admin">
                 </div>
@@ -240,93 +149,87 @@
         <div class="page-content">
             <div class="users-header">
                 <div>
-                    <h1>Platform Analytics</h1>
-                    <p>Track user growth, revenue, and platform adoption</p>
+                    <h1>Platform Intelligence</h1>
+                    <p id="lastSyncTime">Live monitoring active...</p>
                 </div>
                 <div class="page-actions">
-                    <button class="btn btn-secondary" onclick="exportUsers()">
-                        <i class="fas fa-download"></i>
-                        Export CSV
-                    </button>
-                    <button class="btn btn-primary" onclick="addNewUser()">
-                        <i class="fas fa-user-plus"></i>
-                        Add User
+                    <button class="btn btn-secondary" onclick="fetchAnalytics(true)">
+                        <i class="fas fa-sync"></i>
+                        Force Sync
                     </button>
                 </div>
             </div>
 
-            <!-- Mini Stats -->
-            <div class="users-stats">
+            <!-- Mini Stats - Advanced 6 Bento -->
+            <div class="users-stats" style="grid-template-columns: repeat(3, 1fr);">
+                <!-- Live Pulse -->
+                <div class="mini-stat" style="position:relative; overflow:hidden;">
+                    <div style="position:absolute; top:15px; right:15px; width:10px; height:10px; border-radius:50%; background:var(--green); box-shadow:0 0 10px var(--green); animation: pulse 2s infinite;"></div>
+                    <div class="mini-stat-value" id="statLiveUsers" style="color: var(--green)">0</div>
+                    <div class="mini-stat-label">Live Active Users</div>
+                    <div style="font-size:10px; color:var(--text-muted); margin-top:5px;">In the last 5 minutes</div>
+                </div>
+                <!-- Total Users -->
                 <div class="mini-stat">
                     <div class="mini-stat-value" id="statTotalUsers">0</div>
-                    <div class="mini-stat-label">Total Users</div>
+                    <div class="mini-stat-label">Total Registered Users</div>
+                    <div style="font-size:10px; color:var(--text-muted); margin-top:5px;">Verified accounts</div>
                 </div>
-                <div class="mini-stat">
-                    <div class="mini-stat-value" id="statLiveUsers" style="color: var(--green)">0</div>
-                    <div class="mini-stat-label">Total Users (Live)</div>
-                </div>
-                <div class="mini-stat">
-                    <div class="mini-stat-value" style="color: var(--orange)" id="thirtyDayBookings">0</div>
-                    <div class="mini-stat-label">30-Day Bookings</div>
-                </div>
+                <!-- 30-Day Gross -->
                 <div class="mini-stat">
                     <div class="mini-stat-value" style="color: var(--purple)" id="thirtyDayRevenue">₹0</div>
-                    <div class="mini-stat-label">30-Day Revenue</div>
+                    <div class="mini-stat-label">Platform Gross Volume (30D)</div>
+                    <div style="font-size:10px; color:#10b981; margin-top:5px;"><i class="fas fa-arrow-up"></i> Last 30 days</div>
                 </div>
-            </div>
-
-            <!-- Filters -->
-            <div class="filters-bar">
-                <div class="filter-group">
-                    <i class="fas fa-filter" style="color: var(--text-muted)"></i>
-                    <select id="statusFilter" onchange="filterUsers()">
-                        <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="suspended">Suspended</option>
-                    </select>
+                <!-- Session Avg -->
+                <div class="mini-stat">
+                    <div class="mini-stat-value" style="color: var(--orange)" id="statAvgSession">0s</div>
+                    <div class="mini-stat-label">Average Session Time</div>
+                    <div style="font-size:10px; color:var(--text-muted); margin-top:5px;">Per engaged user</div>
                 </div>
-                <div class="filter-group">
-                    <i class="fas fa-graduation-cap" style="color: var(--text-muted)"></i>
-                    <select id="collegeFilter" onchange="filterUsers()">
-                        <option value="">All Colleges</option>
-                        <option value="iit">IITs</option>
-                        <option value="bits">BITS</option>
-                        <option value="nit">NITs</option>
-                        <option value="other">Others</option>
-                    </select>
+                <!-- ARPU Approximation -->
+                <div class="mini-stat">
+                    <div class="mini-stat-value" style="color: #3b82f6" id="statARPU">₹0</div>
+                    <div class="mini-stat-label">Average Revenue Per User</div>
+                    <div style="font-size:10px; color:var(--text-muted); margin-top:5px;">(ARPU - 30D Basis)</div>
                 </div>
-                <div class="filter-group">
-                    <i class="fas fa-calendar" style="color: var(--text-muted)"></i>
-                    <select id="dateFilter" onchange="filterUsers()">
-                        <option value="">All Time</option>
-                        <option value="today">Today</option>
-                        <option value="week">This Week</option>
-                        <option value="month">This Month</option>
-                    </select>
+                <!-- AOV Approximation -->
+                <div class="mini-stat">
+                    <div class="mini-stat-value" style="color: #ec4899" id="statAvgOrder">₹0</div>
+                    <div class="mini-stat-label">Average Registration Cost</div>
+                    <div style="font-size:10px; color:var(--text-muted); margin-top:5px;">(Based on 30D total conversions)</div>
                 </div>
             </div>
 
             <!-- Analytics Charts -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
-                <div class="users-table-container" style="padding: 1.5rem;">
-                    <h3 style="margin-bottom: 1rem; color: var(--text-primary); font-weight: 600;">Revenue Target (Past 30 Days)</h3>
+            <div id="charts-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-top: 2rem;">
+                <!-- Revenue Pipeline -->
+                <div class="users-table-container" style="padding: 1.5rem; grid-column: span 2;">
+                    <h3 style="margin-bottom: 1rem; color: var(--text-primary); font-weight: 600;"><i class="fas fa-chart-line" style="color:var(--purple); margin-right:5px;"></i> Revenue Pipeline (Past 30 Days)</h3>
                     <div style="position: relative; height: 300px;">
                         <canvas id="analyticsRevenueChart"></canvas>
                     </div>
                 </div>
 
+                <!-- Device Distribution Doughnut -->
                 <div class="users-table-container" style="padding: 1.5rem;">
-                    <h3 style="margin-bottom: 1rem; color: var(--text-primary); font-weight: 600;">User Acquisition (Past 30 Days)</h3>
-                    <div style="position: relative; height: 300px;">
-                        <canvas id="analyticsUserChart"></canvas>
+                    <h3 style="margin-bottom: 1rem; color: var(--text-primary); font-weight: 600;"><i class="fas fa-mobile-alt" style="color:#ec4899; margin-right:5px;"></i> Active Devices</h3>
+                    <div style="position: relative; height: 250px;">
+                        <canvas id="analyticsDeviceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- City Base Horizontal Bar -->
+                <div class="users-table-container" style="padding: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; color: var(--text-primary); font-weight: 600;"><i class="fas fa-map-marker-alt" style="color:#3b82f6; margin-right:5px;"></i> Top Regional Markets</h3>
+                    <div style="position: relative; height: 250px;">
+                        <canvas id="analyticsCityChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-            
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/config.js"></script>
     <script src="js/analytics.js"></script>
