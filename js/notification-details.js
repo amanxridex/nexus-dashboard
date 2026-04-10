@@ -28,28 +28,35 @@ document.addEventListener('DOMContentLoaded', async () => {
                 recipients.forEach(r => {
                     const date = new Date(r.sent_at).toLocaleString();
                     const tr = document.createElement('tr');
+                    
+                    let mapLink = r.current_location !== 'Not Available' 
+                        ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.current_location)}" target="_blank" style="color:var(--primary-color);text-decoration:none;"><i class="fas fa-map-marker-alt"></i> ${r.current_location}</a>` 
+                        : `<span style="color:var(--text-muted);"><i class="fas fa-location-slash"></i> Unknown</span>`;
+
                     tr.innerHTML = `
                         <td><strong>${r.full_name}</strong></td>
                         <td>${r.email}</td>
                         <td>${r.phone}</td>
                         <td>${date}</td>
+                        <td style="font-size:12px; color:var(--text-muted);">${r.device_info || 'Unknown'}</td>
+                        <td style="font-size:12px;">${mapLink}</td>
                         <td class="token-cell" title="${r.firebase_uid} | ${r.fcm_token}">${r.fcm_token}</td>
                     `;
                     tbody.appendChild(tr);
                 });
             } else {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No recipients found for this broadcast.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No recipients found for this broadcast.</td></tr>';
             }
 
         } else {
             metaTitle.innerText = "Failed to load broadcast";
             metaBody.innerText = data.message || "Unknown API error";
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">${data.message || 'Error loading records'}</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ef4444;">${data.message || 'Error loading records'}</td></tr>`;
         }
     } catch (e) {
         console.error("Fetch error:", e);
         metaTitle.innerText = "Network Error";
         metaBody.innerText = "Check backend connection.";
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #ef4444;">Network connection failed.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #ef4444;">Network connection failed.</td></tr>';
     }
 });
