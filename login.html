@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECURE ACCESS | NEXUS ADMIN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --surface-color: #1e293b;
+            --primary-color: #6366f1;
+            --danger-color: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #lockdownScreen {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            text-align: center;
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: inset 0 0 50px rgba(239, 68, 68, 0.2); }
+            50% { box-shadow: inset 0 0 150px rgba(239, 68, 68, 0.5); }
+            100% { box-shadow: inset 0 0 50px rgba(239, 68, 68, 0.2); }
+        }
+
+        .login-card {
+            background: var(--surface-color);
+            width: 100%;
+            max-width: 420px;
+            padding: 3rem 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        .timer-ring {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--danger-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem auto;
+            position: relative;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+            animation: rotate-shake 12s linear forwards;
+        }
+
+        .timer-text {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--danger-color);
+            font-variant-numeric: tabular-nums;
+        }
+
+        @keyframes rotate-shake {
+            0% { transform: scale(1); border-color: #6366f1; box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
+            50% { transform: scale(1.05); border-color: #f59e0b; box-shadow: 0 0 30px rgba(245, 158, 11, 0.4); }
+            80% { transform: scale(1.1) rotate(2deg); border-color: #ef4444; box-shadow: 0 0 50px rgba(239, 68, 68, 0.6); }
+            100% { transform: scale(1) rotate(-2deg); border-color: #ef4444; box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.8); }
+        }
+
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label {
+            display: block; font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem; letter-spacing: 1px; text-transform: uppercase;
+        }
+        .form-control {
+            width: 100%; bg: rgba(0,0,0,0.2); border: 2px solid rgba(255,255,255,0.1); padding: 1rem; border-radius: 12px; color: #fff; font-size: 1rem; transition: border 0.3s;
+        }
+        .form-control:focus { outline: none; border-color: var(--primary-color); }
+        
+        .btn-submit {
+            width: 100%; border: none; padding: 1rem; font-size: 1.1rem; font-weight: 600; border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-color), #4f46e5); color: #fff; cursor: pointer; transition: transform 0.2s, opacity 0.2s;
+        }
+        .btn-submit:hover { transform: translateY(-2px); opacity: 0.9; }
+
+        .scanline {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 99; pointer-events: none;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+            background-size: 100% 4px; opacity: 0.15;
+        }
+        
+        .error-msg { color: var(--danger-color); font-size: 0.9rem; text-align: center; margin-bottom: 1rem; min-height: 20px; }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+
+    <div class="login-card" id="loginCard">
+        <div class="timer-ring">
+            <span class="timer-text" id="countdown">12.0</span>
+        </div>
+        <h2 style="text-align: center; margin-bottom: 0.5rem; letter-spacing: 2px;">NEXUS CORE</h2>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem; font-size: 0.85rem;">Identify within timeframe or IP will be banned.</p>
+        
+        <div class="error-msg" id="errorMsg"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Admin ID</label>
+                <input type="text" id="username" class="form-control" autocomplete="off" required>
+            </div>
+            <div class="form-group">
+                <label>Passphrase</label>
+                <input type="password" id="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn-submit" id="submitBtn">Authenticate</button>
+        </form>
+    </div>
+
+    <!-- Lockdown Screen -->
+    <div id="lockdownScreen">
+        <i class="fas fa-biohazard" style="font-size: 5rem; color: var(--danger-color); margin-bottom: 1.5rem;"></i>
+        <h1 style="color: var(--danger-color); font-size: 3rem; letter-spacing: 4px; margin-bottom: 1rem;">ACCESS DENIED</h1>
+        <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 500px; line-height: 1.6;">
+            The 12-second security window expired or invalid credentials were provided multiple times. This IP address trace has been dumped. Wait 5 minutes before retrying.
+        </p>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

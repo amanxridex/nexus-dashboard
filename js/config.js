@@ -8,6 +8,42 @@ const API_BASE_URL = 'https://nexus-dashboard-backend.onrender.com/api';
 // Export for global access if using modules
 window.API_BASE_URL = API_BASE_URL;
 
+// === GLOBAL SECURITY VAULT INTERCEPTOR ===
+const isLoginPage = window.location.pathname.includes('login.html');
+const secureToken = localStorage.getItem('nexus_admin_jwt');
+
+if (!isLoginPage && !secureToken) {
+    // Immediate vault redirection if standard page is accessed without token
+    window.location.replace('login.html');
+}
+
+// Proxy native fetch to ALWAYS attach Bearer token and handle 401 Force-outs
+const nativeFetch = window.fetch;
+window.fetch = async function(...args) {
+    let [resource, config] = args;
+    config = config || {};
+    
+    // Only intercept if targeting our Secure Backend API
+    if (typeof resource === 'string' && resource.startsWith(window.API_BASE_URL)) {
+        config.headers = {
+            ...config.headers,
+            'Authorization': `Bearer ${localStorage.getItem('nexus_admin_jwt')}`
+        };
+    }
+
+    try {
+        const response = await nativeFetch(resource, config);
+        if (response.status === 401) {
+            localStorage.removeItem('nexus_admin_jwt');
+            if (!isLoginPage) window.location.replace('login.html');
+        }
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+// === END SECURITY INTERCEPTOR ===
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const res = await fetch(`${window.API_BASE_URL}/dashboard/stats`);
