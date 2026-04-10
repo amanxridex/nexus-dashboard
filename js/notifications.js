@@ -31,7 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
             specificUid: specificInput.value,
             title: document.getElementById('title').value,
             body: document.getElementById('body').value,
-            type: document.getElementById('type').value
+            type: document.getElementById('type').value,
+            link: document.getElementById('actionLink').value
         };
 
         try {
