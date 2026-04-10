@@ -127,13 +127,13 @@ function renderGridView(users) {
             <div class="user-select">
                 <input type="checkbox" 
                     ${selectedUsers.has(user.id) ? 'checked' : ''} 
-                    onchange="toggleSelection(${user.id})"
+                    onchange="toggleSelection('${user.id}')"
                     onclick="event.stopPropagation()">
             </div>
             <div class="user-card-header">
                 <span class="status-badge ${user.status}">${user.status}</span>
             </div>
-            <div class="user-main" onclick="viewUser(${user.id})">
+            <div class="user-main" onclick="viewUser('${user.id}')">
                 <img src="https://ui-avatars.com/api/?name=${user.avatar}&background=random&color=fff&size=128" 
                      alt="${user.name}" class="user-avatar-large">
                 <div class="user-details">
@@ -166,10 +166,10 @@ function renderGridView(users) {
                     </div>
                 </div>
                 <div class="user-actions">
-                    <button class="action-icon" onclick="event.stopPropagation(); editUser(${user.id})" title="Edit">
+                    <button class="action-icon" onclick="event.stopPropagation(); editUser('${user.id}')" title="Edit">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="action-icon danger" onclick="event.stopPropagation(); deleteUser(${user.id})" title="Delete">
+                    <button class="action-icon danger" onclick="event.stopPropagation(); deleteUser('${user.id}')" title="Delete">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -194,7 +194,7 @@ function renderTableView(users) {
             <td>
                 <input type="checkbox" 
                     ${selectedUsers.has(user.id) ? 'checked' : ''} 
-                    onchange="toggleSelection(${user.id})">
+                    onchange="toggleSelection('${user.id}')">
             </td>
             <td>
                 <div class="user-cell">
@@ -230,13 +230,13 @@ function renderTableView(users) {
             </td>
             <td>
                 <div class="user-actions">
-                    <button class="action-icon" onclick="viewUser(${user.id})" title="View">
+                    <button class="action-icon" onclick="viewUser('${user.id}')" title="View">
                         <i class="fas fa-eye"></i>
                     </button>
-                    <button class="action-icon" onclick="editUser(${user.id})" title="Edit">
+                    <button class="action-icon" onclick="editUser('${user.id}')" title="Edit">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="action-icon danger" onclick="deleteUser(${user.id})" title="Delete">
+                    <button class="action-icon danger" onclick="deleteUser('${user.id}')" title="Delete">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
