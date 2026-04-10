@@ -19,6 +19,14 @@ if (!isLoginPage && !secureToken) {
 
 // Proxy native fetch to ALWAYS attach Bearer token and handle 401 Force-outs
 const nativeFetch = window.fetch;
+let isRefreshing = false;
+let refreshSubscribers = [];
+
+function onRefreshed(token) {
+    refreshSubscribers.forEach(cb => cb(token));
+    refreshSubscribers = [];
+}
+
 window.fetch = async function(...args) {
     let [resource, config] = args;
     config = config || {};
@@ -32,11 +40,56 @@ window.fetch = async function(...args) {
     }
 
     try {
-        const response = await nativeFetch(resource, config);
-        if (response.status === 401) {
-            localStorage.removeItem('nexus_admin_jwt');
-            if (!isLoginPage) window.location.replace('login.html');
+        let response = await nativeFetch(resource, config);
+        
+        if (response.status === 401 && !isLoginPage && !resource.includes('/admin/auth/')) {
+            // Attempt Silent Refresh
+            const refreshToken = localStorage.getItem('nexus_admin_refresh');
+            if(!refreshToken) throw new Error('No refresh token');
+
+            if (!isRefreshing) {
+                isRefreshing = true;
+                try {
+                    const rfRes = await nativeFetch(`${window.API_BASE_URL}/admin/auth/refresh`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ refreshToken })
+                    });
+                    
+                    const rfData = await rfRes.json();
+                    
+                    if (rfRes.ok && rfData.success) {
+                        localStorage.setItem('nexus_admin_jwt', rfData.token);
+                        isRefreshing = false;
+                        onRefreshed(rfData.token);
+                        
+                        // Retry original request
+                        config.headers['Authorization'] = `Bearer ${rfData.token}`;
+                        return await nativeFetch(resource, config);
+                    } else {
+                        throw new Error('Refresh rejected');
+                    }
+                } catch(e) {
+                    isRefreshing = false;
+                    localStorage.removeItem('nexus_admin_jwt');
+                    localStorage.removeItem('nexus_admin_refresh');
+                    window.location.replace('login.html');
+                    return response;
+                }
+            } else {
+                // Wait for existing refresh to finish, then retry
+                return new Promise(resolve => {
+                    refreshSubscribers.push((newToken) => {
+                        config.headers['Authorization'] = `Bearer ${newToken}`;
+                        resolve(nativeFetch(resource, config));
+                    });
+                });
+            }
+        } else if (response.status === 401 && isLoginPage) {
+            // If we are actually trying to login and it fails, just return it so UI handles it.
+            return response;
         }
+        
         return response;
     } catch (error) {
         throw error;

@@ -53,12 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
+        const totp = document.getElementById('totp').value;
 
         try {
             const res = await fetch(`${window.API_BASE_URL}/admin/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ username, password, totp })
             });
 
             const data = await res.json();
@@ -66,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.ok && data.success) {
                 // Save JWT Securely
                 localStorage.setItem('nexus_admin_jwt', data.token);
+                localStorage.setItem('nexus_admin_refresh', data.refreshToken);
                 window.location.replace('index.html'); // Vault opened successfully
             } else {
                 handleFailedAttempt(data.message || 'Authorization server rejected credentials.');

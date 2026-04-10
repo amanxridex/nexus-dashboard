@@ -295,11 +295,40 @@ function clearSelection() {
 
 function viewUser(id) {
     const user = usersData.find(u => u.id === id);
-    if(user && user.firebase_uid) {
-        window.location.href = `user-details.html?id=${user.firebase_uid}`;
-    } else {
-        showToast('User ID missing. Try refreshing the page.', 'error');
-    }
+    if(!user) return;
+    
+    const modal = document.getElementById('userModal');
+    const body = document.getElementById('modalBody');
+    
+    body.innerHTML = `
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <img src="https://ui-avatars.com/api/?name=${user.avatar}&background=random&color=fff&size=200" 
+                 alt="${user.name}" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 1rem;">
+            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">${user.name}</h3>
+            <span class="status-badge ${user.status}">${user.status}</span>
+        </div>
+        <div style="display: grid; gap: 1rem; margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px;">
+                <span style="color: var(--text-muted);">Email</span>
+                <span>${user.email}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px;">
+                <span style="color: var(--text-muted);">Phone</span>
+                <span>${user.phone}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px;">
+                <span style="color: var(--text-muted);">Total Spent</span>
+                <span style="color: var(--green); font-weight: 600;">₹${user.spent.toLocaleString('en-IN')}</span>
+            </div>
+        </div>
+        
+        <!-- EXPLICIT ANALYTICS NAVIGATION BUTTON -->
+        <button onclick="window.location.href='user-details.html?id=${user.firebase_uid}'" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; padding: 1rem; border-radius: 12px; color: #fff; font-weight: 600; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); transition: transform 0.2s;">
+            <i class="fas fa-chart-pie"></i> View Full Analytics Profile
+        </button>
+    `;
+    
+    modal.classList.add('active');
 }
 
 function closeModal() {
