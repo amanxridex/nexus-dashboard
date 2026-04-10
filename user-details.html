@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Detail Analytics | NEXUS Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/users.css">
+    <style>
+        .analytics-hero {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 100px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .profile-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--bg-secondary);
+            position: relative;
+            z-index: 1;
+            margin-bottom: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .profile-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            color: #fff;
+        }
+
+        .profile-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .telemetry-node {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .telemetry-node span {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .telemetry-node strong {
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .telemetry-node.highlight {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+        
+        .telemetry-node.highlight strong {
+            color: var(--primary-light);
+        }
+
+        .stats-matrix {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .matrix-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .matrix-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .matrix-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .matrix-icon.blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .matrix-icon.green { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .matrix-icon.purple { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+
+        .matrix-info h4 {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .matrix-info h2 {
+            font-size: 1.75rem;
+            color: #fff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tabs-header {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: #fff;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary-color);
+            border-radius: 2px 2px 0 0;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2rem 0;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Detail Tables Overlay */
+        .detail-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+        
+        .detail-table th {
+            text-align: left;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-table td {
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-table tr td:first-child {
+            border-left: 1px solid var(--border-color);
+            border-radius: 8px 0 0 8px;
+        }
+
+        .detail-table tr td:last-child {
+            border-right: 1px solid var(--border-color);
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Main Content mapped specifically to full width logic, we will strip the sidebar for this focused view and add a back button -->
+    <main style="padding: 2rem; max-width: 1400px; margin: 0 auto;">
+        
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+            <a href="users.html" class="btn btn-secondary" style="border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div>
+                <h1 style="margin: 0; font-size: 1.8rem;">User Analytics Intel</h1>
+                <p style="color: var(--text-muted); margin: 0; font-size: 0.9rem;">High-fidelity session and transaction tracker</p>
+            </div>
+            <div style="margin-left: auto;">
+                <span id="syncStatusTag" class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3); padding: 8px 16px;">
+                    <i class="fas fa-satellite-dish fa-spin" style="margin-right: 8px;"></i> Live Syncing Telemetry
+                </span>
+            </div>
+        </div>
+
+        <div id="loadingState" style="text-align: center; padding: 5rem 0;">
+            <i class="fas fa-circle-notch fa-spin" style="font-size: 3rem; color: var(--primary-color);"></i>
+            <h3 style="margin-top: 1rem; color: var(--text-muted);">Decrypting User Footprints...</h3>
+        </div>
+
+        <div id="analyticsDashboard" style="display: none;">
+            
+            <div class="analytics-hero">
+                <!-- Profile Block -->
+                <div class="profile-card">
+                    <img id="uiAvatar" src="https://ui-avatars.com/api/?name=U&background=random" alt="Avatar">
+                    <h2 id="uiName">Loading Name...</h2>
+                    <p id="uiEmail">...</p>
+
+                    <div class="telemetry-grid">
+                        <div class="telemetry-node">
+                            <span>FCM Status</span>
+                            <strong id="uiFcm" style="font-size: 0.8rem; word-break: break-all;">Checking...</strong>
+                        </div>
+                        <div class="telemetry-node highlight">
+                            <span>Auth UUID</span>
+                            <strong id="uiUid" style="font-size: 0.6rem; word-break: break-all;">...</strong>
+                        </div>
+                        <div class="telemetry-node" style="grid-column: span 2;">
+                            <span>Hardware Footprint</span>
+                            <strong id="uiDevice">...</strong>
+                        </div>
+                        <div class="telemetry-node" style="grid-column: span 2;">
+                            <span>Last GPS Pin</span>
+                            <strong id="uiLocation">...</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Matrix Blocks -->
+                <div style="display: flex; flex-direction: column; gap: 2rem;">
+                    <div class="stats-matrix">
+                        <div class="matrix-card">
+                            <div class="matrix-icon purple">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="matrix-info">
+                                <h4>Total Screen Time</h4>
+                                <h2 id="uiTimeSpent">0<span style="font-size: 0.9rem; color: var(--text-muted); font-weight: normal;">sec</span></h2>
+                            </div>
+                        </div>
+
+                        <div class="matrix-card">
+                            <div class="matrix-icon blue">
+                                <i class="fas fa-plug"></i>
+                            </div>
+                            <div class="matrix-info">
+                                <h4>Session Opens</h4>
+                                <h2 id="uiSessions">0</h2>
+                            </div>
+                        </div>
+
+                        <div class="matrix-card">
+                            <div class="matrix-icon green">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <div class="matrix-info">
+                                <h4>Wallet Ledger</h4>
+                                <h2 id="uiWalletBalance">₹0</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--bg-secondary); border-radius: 16px; border: 1px solid var(--border-color); flex: 1; padding: 2rem;">
+                        <h3 style="margin: 0 0 1rem 0; font-size: 1.2rem;">Live Pulse & Telemetry</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">
+                            Session timing is recorded dynamically via hardware extraction sockets. Every 10 seconds of active viewport focus transmits a signed JWT ping to Superbase updating their exact screen-time metrics.
+                        </p>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-tertiary); border-radius: 8px;">
+                            <div>
+                                <span style="display: block; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.25rem;">Last Active Ping</span>
+                                <strong id="uiLastActive" style="color: #fff; font-size: 1.1rem;">Waiting for signal...</strong>
+                            </div>
+                            <div style="width: 12px; height: 12px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px #10b981; animation: pulse 2s infinite;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deep Data Tabs -->
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchTab('bookings')">Booking Logs</button>
+            </div>
+
+            <div id="bookingsTab" class="tab-content active">
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>TICKET ID</th>
+                            <th>FESTIVAL</th>
+                            <th>AMOUNT</th>
+                            <th>PURCHASED AT</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="uiBookingsList">
+                        <!-- JS injected -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </main>
+
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+    </style>
+
+    <script src="js/config.js"></script>
+    <script src="js/user-details.js"></script>
+</body>
+</html>
