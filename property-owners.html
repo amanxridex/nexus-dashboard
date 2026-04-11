@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hosts | NEXUS Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/hosts.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-layer-group"></i>
+                <span>NEXUS</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="users.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+                <span class="badge"></span>
+            </a>
+            <a href="hosts.html" class="nav-item active">
+                <i class="fas fa-user-tie"></i>
+                <span>Hosts</span>
+                <span class="badge"></span>
+            </a>
+                        <a href="properties.html" class="nav-item">
+                <i class="fas fa-building"></i>
+                <span>Properties</span>
+            </a>
+<a href="fests.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Fests</span>
+                <span class="badge"></span>
+            </a>
+            <a href="colleges.html" class="nav-item">
+                <i class="fas fa-university"></i>
+                <span>Colleges</span>
+                <span class="badge"></span>
+            </a>
+            <a href="bookings.html" class="nav-item">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Bookings</span>
+            </a>
+            <a href="payments.html" class="nav-item">
+                <i class="fas fa-rupee-sign"></i>
+                <span>Payments</span>
+            </a>
+            <a href="analytics.html" class="nav-item">
+                <i class="fas fa-chart-pie"></i>
+                <span>Analytics</span>
+            </a>
+                        <a href="notifications.html" class="nav-item">
+                <i class="fas fa-bell"></i>
+                <span>Notifications</span>
+            </a>
+<a href="settings.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="admin-profile">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Admin">
+                <div class="admin-info">
+                    <div class="admin-name">Super Admin</div>
+                    <div class="admin-role">Administrator</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search hosts by name, college, or email..." id="hostSearch">
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <button class="icon-btn" onclick="openVerificationQueue()" title="Verification Queue">
+                    <i class="fas fa-user-check"></i>
+                    <span class="notification-dot pulse">3</span>
+                </button>
+                <button class="icon-btn" onclick="toggleNotifications()" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <div class="user-menu">
+<a href="settings.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="admin-profile">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Admin">
+                <div class="admin-info">
+                    <div class="admin-name">Super Admin</div>
+                    <div class="admin-role">Administrator</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search hosts by name, college, or email..." id="hostSearch">
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <button class="icon-btn" onclick="openVerificationQueue()" title="Verification Queue">
+                    <i class="fas fa-user-check"></i>
+                    <span class="notification-dot pulse">3</span>
+                </button>
+                <button class="icon-btn" onclick="toggleNotifications()" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <div class="user-menu">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Admin">
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="header-title">
+                    <h1>Property Owners</h1>
+                    <p>Manage property owners and verifications</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-secondary" onclick="exportHosts()">
+                        <i class="fas fa-download"></i>
+                        <span>Export</span>
+                    </button>
+                    <button class="btn btn-primary" onclick="addNewHost()">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Host</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hosts Overview Stats -->
+            <div class="hosts-overview">
+                <div class="overview-card featured">
+                    <div class="overview-icon gold">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3 id="statTotalHosts">0</h3>
+                        <p>Total Owners</p>
+                        <div class="mini-chart">
+                            <svg viewBox="0 0 100 30" class="sparkline">
+                                <polyline fill="none" stroke="currentColor" stroke-width="2" 
+                                    points="0,25 20,20 40,23 60,15 80,18 100,5"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="overview-icon green">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3 id="statVerifiedHosts">0</h3>
+                        <p>Verified</p>
+                        <span class="trend up">+5 this week</span>
+                    </div>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="overview-icon orange">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3 id="statPendingHosts">0</h3>
+                        <p>Pending</p>
+                        <span class="trend">Needs review</span>
+                    </div>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="overview-icon blue">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3 id="statTotalEarnings">₹0</h3>
+                        <p>Total Earnings</p>
+                        <span class="trend up">+18.5%</span>
+                    </div>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="overview-icon purple">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="overview-info">
+                        <h3 id="statAvgRating">0.0</h3>
+                        <p>Avg Rating</p>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters & View Toggle -->
+            <div class="toolbar">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all" onclick="filterHosts('all')">
+                        All Hosts <span class="count">89</span>
+                    </button>
+                    <button class="filter-tab" data-filter="verified" onclick="filterHosts('verified')">
+                        Verified <span class="count">72</span>
+                    </button>
+                    <button class="filter-tab" data-filter="pending" onclick="filterHosts('pending')">
+                        Pending <span class="count">12</span>
+                    </button>
+                    <button class="filter-tab" data-filter="suspended" onclick="filterHosts('suspended')">
+                        Suspended <span class="count">5</span>
+                    </button>
+                </div>
+                
+                <div class="toolbar-actions">
+                    <div class="sort-dropdown">
+                        <select id="sortHosts" onchange="sortHosts()">
+                            <option value="recent">Recently Active</option>
+                            <option value="earnings">Top Earners</option>
+                            <option value="rating">Highest Rated</option>
+                            <option value="events">Most Events</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    
+                    <div class="view-toggle">
+                        <button class="toggle-btn active" onclick="toggleView('grid')" title="Grid View">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="toggle-btn" onclick="toggleView('list')" title="List View">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bulk Actions -->
+            <div class="bulk-bar" id="bulkBar" style="display: none;">
+                <div class="bulk-info">
+                    <i class="fas fa-check-square"></i>
+                    <span><strong id="selectedCount">0</strong> hosts selected</span>
+                </div>
+                <div class="bulk-buttons">
+                    <button class="btn btn-sm btn-secondary" onclick="bulkVerify()">
+                        <i class="fas fa-check"></i> Verify
+                    </button>
+                    <button class="btn btn-sm btn-secondary" onclick="bulkMessage()">
+                        <i class="fas fa-envelope"></i> Message
+                    </button>
+                    <button class="btn btn-sm btn-warning" onclick="bulkSuspend()">
+                        <i class="fas fa-ban"></i> Suspend
+                    </button>
+                    <button class="btn btn-sm btn-ghost" onclick="clearSelection()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hosts Grid -->
+            <div class="hosts-grid" id="hostsGrid">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Hosts List View -->
+            <div class="hosts-list" id="hostsList" style="display: none;">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-wrap">
+                <div class="showing-text">
+                    Showing <span id="showStart">1</span>-<span id="showEnd">12</span> of <span id="showTotal">89</span> hosts
+                </div>
+                <div class="pagination" id="pagination">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Host Detail Modal -->
+    <div class="modal" id="hostModal">
+        <div class="modal-overlay" onclick="closeModal()"></div>
+        <div class="modal-content host-modal">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body" id="modalBody">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification Queue Modal -->
+    <div class="modal" id="verificationModal">
+        <div class="modal-overlay" onclick="closeVerificationModal()"></div>
+        <div class="modal-content verification-modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-check"></i> Verification Queue</h2>
+                <button class="modal-close" onclick="closeVerificationModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="verification-list" id="verificationList">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+            
+    <script src="js/config.js"></script>
+    <script src="js/property-owners.js"></script>
+</body>
+</html>

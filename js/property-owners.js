@@ -36,8 +36,8 @@ async function fetchHosts() {
         const allBookings = bookingsData.bookings || [];
         
         if (data.hosts) {
-            const eventHosts = data.hosts.filter(h => h.host_type !== 'property');
-            hostsData = eventHosts.map(h => {
+            const propertyHosts = data.hosts.filter(h => h.host_type === 'property');
+            hostsData = propertyHosts.map(h => {
                 let status = h.verification_status || 'pending';
                 if (status === 'rejected') status = 'suspended';
                 
@@ -175,7 +175,7 @@ function renderGridView(hosts) {
             <div class="host-stats">
                 <div class="stat-box">
                     <h5>${host.eventsHosted}</h5>
-                    <span>Events</span>
+                    <span>Properties</span>
                 </div>
                 <div class="stat-box">
                     <h5>₹${(host.totalEarnings / 1000).toFixed(1)}K</h5>
@@ -223,8 +223,8 @@ function renderListView(hosts) {
         <div class="list-header">
             <div></div>
             <div>Host</div>
-            <div>College</div>
-            <div>Events</div>
+            <div>Location</div>
+            <div>Properties</div>
             <div>Earnings</div>
             <div>Rating</div>
             <div>Actions</div>
@@ -354,7 +354,7 @@ function viewHost(id) {
         <div class="host-modal-stats">
             <div class="modal-stat">
                 <h4>${host.eventsHosted}</h4>
-                <span>Events Hosted</span>
+                <span>Properties Listed</span>
             </div>
             <div class="modal-stat">
                 <h4>₹${(host.totalEarnings / 100000).toFixed(2)}L</h4>
