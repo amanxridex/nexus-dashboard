@@ -1,15 +1,14 @@
 let allProperties = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-    checkAuth();
     loadProperties();
 });
 
 async function loadProperties() {
     try {
-        const response = await fetch(`${config.API_BASE_URL}/admin/properties`, {
+        const response = await fetch(`${window.API_BASE_URL}/admin/properties`, {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('nexus_admin_token')}`
+                'Authorization': `Bearer ${localStorage.getItem('nexus_admin_jwt')}`
             }
         });
         
@@ -123,10 +122,10 @@ async function updateStatus(id, newStatus) {
     if(!confirm(`Are you sure you want to mark this as ${newStatus}?`)) return;
     
     try {
-        const response = await fetch(`${config.API_BASE_URL}/admin/properties/${id}/status`, {
+        const response = await fetch(`${window.API_BASE_URL}/admin/properties/${id}/status`, {
             method: 'PATCH',
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('nexus_admin_token')}`,
+                'Authorization': `Bearer ${localStorage.getItem('nexus_admin_jwt')}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ status: newStatus })
