@@ -31,12 +31,12 @@
                 <span>Users</span>
                 <span class="badge"></span>
             </a>
-            <a href="hosts.html" class="nav-item active">
+            <a href="hosts.html" class="nav-item">
                 <i class="fas fa-user-tie"></i>
                 <span>Hosts</span>
                 <span class="badge"></span>
             </a>
-                        <a href="properties.html" class="nav-item">
+                        <a href="properties.html" class="nav-item active">
                 <i class="fas fa-building"></i>
                 <span>Properties</span>
             </a>
@@ -96,7 +96,7 @@
                 </button>
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search hosts by name, college, or email..." id="hostSearch">
+                    <input type="text" placeholder="Search property owners by name, or email..." id="hostSearch">
                 </div>
             </div>
 
@@ -127,9 +127,9 @@
                         <i class="fas fa-download"></i>
                         <span>Export</span>
                     </button>
-                    <button class="btn btn-primary" onclick="addNewHost()">
+                    <button class="btn btn-primary" style="display:none;" onclick="addNewHost()">
                         <i class="fas fa-plus"></i>
-                        <span>Add Host</span>
+                        <span>Add Owner</span>
                     </button>
                 </div>
             </div>
@@ -207,7 +207,7 @@
             <div class="toolbar">
                 <div class="filter-tabs">
                     <button class="filter-tab active" data-filter="all" onclick="filterHosts('all')">
-                        All Hosts <span class="count">89</span>
+                        All Owners <span class="count">89</span>
                     </button>
                     <button class="filter-tab" data-filter="verified" onclick="filterHosts('verified')">
                         Verified <span class="count">72</span>
@@ -226,7 +226,7 @@
                             <option value="recent">Recently Active</option>
                             <option value="earnings">Top Earners</option>
                             <option value="rating">Highest Rated</option>
-                            <option value="events">Most Events</option>
+                            <option value="events">Most Properties</option>
                         </select>
                         <i class="fas fa-chevron-down"></i>
                     </div>
@@ -246,7 +246,7 @@
             <div class="bulk-bar" id="bulkBar" style="display: none;">
                 <div class="bulk-info">
                     <i class="fas fa-check-square"></i>
-                    <span><strong id="selectedCount">0</strong> hosts selected</span>
+                    <span><strong id="selectedCount">0</strong> owners selected</span>
                 </div>
                 <div class="bulk-buttons">
                     <button class="btn btn-sm btn-secondary" onclick="bulkVerify()">
@@ -277,7 +277,7 @@
             <!-- Pagination -->
             <div class="pagination-wrap">
                 <div class="showing-text">
-                    Showing <span id="showStart">1</span>-<span id="showEnd">12</span> of <span id="showTotal">89</span> hosts
+                    Showing <span id="showStart">1</span>-<span id="showEnd">12</span> of <span id="showTotal">89</span> owners
                 </div>
                 <div class="pagination" id="pagination">
                     <!-- Populated by JS -->
