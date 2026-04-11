@@ -60,7 +60,7 @@ function renderPropertiesTable() {
     }
     
     allProperties.forEach(prop => {
-        const hostName = prop.hosts ? (prop.hosts.business_name || prop.hosts.user_name) : 'Unknown';
+        const hostName = prop.hosts ? (prop.hosts.business_name || prop.hosts.full_name) : 'Unknown';
         
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -98,7 +98,7 @@ function viewProperty(id) {
 
     body.innerHTML = `
         <div style="margin-bottom: 20px;">
-            <strong>Host:</strong> ${prop.hosts ? (prop.hosts.business_name || prop.hosts.user_name) : 'Unknown'} <br>
+            <strong>Host:</strong> ${prop.hosts ? (prop.hosts.business_name || prop.hosts.full_name) : 'Unknown'} <br>
             <strong>Contact:</strong> ${prop.contact_name} (${prop.contact_phone})<br>
             <strong>Location:</strong> ${prop.address}, ${prop.city} - ${prop.pincode}
         </div>
