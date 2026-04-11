@@ -87,6 +87,45 @@
         </header>
 
         <div class="page-content">
+            <!-- Stats Cards -->
+            <div class="stats-row" style="margin-bottom: 2rem; grid-template-columns: repeat(5, 1fr);">
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="fas fa-building"></i></div>
+                    <div class="stat-info">
+                        <h3 id="statTotal">0</h3>
+                        <p>Total Properties</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="fas fa-clock"></i></div>
+                    <div class="stat-info">
+                        <h3 id="statPending">0</h3>
+                        <p>Pending Review</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-info">
+                        <h3 id="statApproved">0</h3>
+                        <p>Accepted</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red" style="background: rgba(239, 68, 68, 0.15); color: var(--red); box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);"><i class="fas fa-times-circle"></i></div>
+                    <div class="stat-info">
+                        <h3 id="statRejected">0</h3>
+                        <p>Rejected</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue" style="background: rgba(59, 130, 246, 0.15); color: var(--blue); box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);"><i class="fas fa-user-tie"></i></div>
+                    <div class="stat-info">
+                        <h3 id="statOwners">0</h3>
+                        <p>Property Owners</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="data-card">
                 <div class="table-container">
                     <table class="data-table">

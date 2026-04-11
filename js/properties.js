@@ -16,6 +16,7 @@ async function loadProperties() {
         
         if (data.success) {
             allProperties = data.data;
+            updateStats();
             renderPropertiesTable();
         } else {
             console.error('Failed to load properties');
@@ -23,6 +24,30 @@ async function loadProperties() {
     } catch (error) {
         console.error('Error:', error);
     }
+}
+
+function updateStats() {
+    let total = allProperties.length;
+    let pending = 0;
+    let approved = 0;
+    let rejected = 0;
+    let uniqueOwners = new Set();
+    
+    allProperties.forEach(p => {
+        if (p.status === 'pending') pending++;
+        else if (p.status === 'approved') approved++;
+        else if (p.status === 'rejected') rejected++;
+        
+        if (p.host_id) {
+            uniqueOwners.add(p.host_id);
+        }
+    });
+
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statPending').textContent = pending;
+    document.getElementById('statApproved').textContent = approved;
+    document.getElementById('statRejected').textContent = rejected;
+    document.getElementById('statOwners').textContent = uniqueOwners.size;
 }
 
 function renderPropertiesTable() {
