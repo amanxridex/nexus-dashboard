@@ -16,7 +16,7 @@ async function initLogsSystem() {
         }
 
         // Fetch configured bridged environments
-        const res = await fetch(`${API_URL}/logs/projects`);
+        const res = await fetch(`${API_URL}/admin/logs/projects`);
         
         if (res.status === 401 || res.status === 403) {
             window.location.href = 'login.html';
@@ -69,7 +69,7 @@ async function fetchLogs() {
         btn.innerHTML = '<i class="fas fa-sync fa-spin"></i> Pulling...';
         btn.disabled = true;
 
-        const res = await fetch(`${API_URL}/logs/fetch?projectId=${currentProject}&platform=${currentPlatform}`);
+        const res = await fetch(`${API_URL}/admin/logs/fetch?projectId=${currentProject}&platform=${currentPlatform}`);
         const data = await res.json();
 
         if (data.success) {
