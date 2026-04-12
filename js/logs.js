@@ -9,16 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function initLogsSystem() {
     try {
-        const token = localStorage.getItem('nexus_admin_token');
+        const token = localStorage.getItem('nexus_admin_jwt');
         if (!token) {
             window.location.href = 'login.html';
             return;
         }
 
         // Fetch configured bridged environments
-        const res = await fetch(`${API_URL}/logs/projects`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await fetch(`${API_URL}/logs/projects`);
         
         if (res.status === 401 || res.status === 403) {
             window.location.href = 'login.html';
@@ -66,16 +64,12 @@ async function switchProject() {
 async function fetchLogs() {
     if (!currentProject || !currentPlatform) return;
     
-    const token = localStorage.getItem('nexus_admin_token');
-    
     try {
         const btn = document.getElementById('refreshBtn');
         btn.innerHTML = '<i class="fas fa-sync fa-spin"></i> Pulling...';
         btn.disabled = true;
 
-        const res = await fetch(`${API_URL}/logs/fetch?projectId=${currentProject}&platform=${currentPlatform}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await fetch(`${API_URL}/logs/fetch?projectId=${currentProject}&platform=${currentPlatform}`);
         const data = await res.json();
 
         if (data.success) {
