@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchRestaurants() {
     try {
-        const token = localStorage.getItem('nexus_admin_token');
+        const token = localStorage.getItem('nexus_admin_jwt');
         if (!token) {
             window.location.href = 'login.html';
             return;
@@ -24,7 +24,7 @@ async function fetchRestaurants() {
             updateStats();
             renderTable();
         } else if (res.status === 401 || res.status === 403) {
-            localStorage.removeItem('nexus_admin_token');
+            localStorage.removeItem('nexus_admin_jwt');
             window.location.href = 'login.html';
         }
     } catch (err) {
@@ -87,7 +87,7 @@ async function updateStatus(id, newStatus) {
     if (!confirm(`Are you sure you want to mark this restaurant as ${newStatus}?`)) return;
 
     try {
-        const token = localStorage.getItem('nexus_admin_token');
+        const token = localStorage.getItem('nexus_admin_jwt');
         const res = await fetch(`${API_URL}/restaurants/${id}/status`, {
             method: 'PATCH',
             headers: {

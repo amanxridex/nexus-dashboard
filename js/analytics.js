@@ -26,7 +26,7 @@ async function fetchAnalytics(isInitial = false) {
 
         const res = await fetch(`${window.API_BASE_URL}/admin/analytics`, {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('nexus_admin_token')}`
+                'Authorization': `Bearer ${localStorage.getItem('nexus_admin_jwt')}`
             }
         });
         
