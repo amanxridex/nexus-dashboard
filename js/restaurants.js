@@ -1,4 +1,3 @@
-const API_URL = window.API_BASE_URL || 'https://nexus-dashboard-backend.onrender.com/api/admin';
 let restaurants = [];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,7 +12,7 @@ async function fetchRestaurants() {
             return;
         }
 
-        const res = await fetch(`${API_URL}/restaurants`, {
+        const res = await fetch(`${window.API_BASE_URL}/admin/restaurants`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -88,7 +87,7 @@ async function updateStatus(id, newStatus) {
 
     try {
         const token = localStorage.getItem('nexus_admin_jwt');
-        const res = await fetch(`${API_URL}/restaurants/${id}/status`, {
+        const res = await fetch(\`${window.API_BASE_URL}/admin/restaurants/${id}/status`, {
             method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${token}`,
