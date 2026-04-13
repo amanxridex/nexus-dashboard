@@ -87,7 +87,7 @@ async function updateStatus(id, newStatus) {
 
     try {
         const token = localStorage.getItem('nexus_admin_jwt');
-        const res = await fetch(\`${window.API_BASE_URL}/admin/restaurants/${id}/status`, {
+        const res = await fetch(`${window.API_BASE_URL}/admin/restaurants/${id}/status`, {
             method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${token}`,
