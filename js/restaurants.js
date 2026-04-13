@@ -123,6 +123,11 @@ function viewRestaurant(id) {
     let diffHtml = '';
     if (r.status === 'update_pending' && r.pending_changes) {
         const p = r.pending_changes;
+        let pendingImgHtml = '';
+        if (p.images && p.images.length > 0) {
+            pendingImgHtml = p.images.map(img => `<img src="${img}" style="height:60px; border-radius:8px; margin-right:5px; border: 2px solid #059669;">`).join('');
+        }
+        
         diffHtml = `
             <div style="grid-column:1/-1; background:#fff7ed; padding:15px; border-radius:8px; border-left:4px solid #ea580c; margin-bottom: 15px;">
                 <h4 style="margin:0 0 10px 0; color:#ea580c;"><i class="fas fa-exclamation-triangle"></i> Pending Host Modifications</h4>
@@ -131,7 +136,8 @@ function viewRestaurant(id) {
                     <tr style="border-bottom: 1px solid rgba(0,0,0,0.1);"><td style="padding:5px;"><strong>Name</strong></td><td>${r.name}</td><td><strong>&rarr;</strong></td><td><strong style="color:#059669;">${p.name || r.name}</strong></td></tr>
                     <tr style="border-bottom: 1px solid rgba(0,0,0,0.1);"><td style="padding:5px;"><strong>Average Price</strong></td><td>${r.cost_for_two}</td><td><strong>&rarr;</strong></td><td><strong style="color:#059669;">${p.cost_for_two || r.cost_for_two}</strong></td></tr>
                     <tr style="border-bottom: 1px solid rgba(0,0,0,0.1);"><td style="padding:5px;"><strong>Cuisines</strong></td><td>${r.cuisines || ''}</td><td><strong>&rarr;</strong></td><td><strong style="color:#059669;">${p.cuisines || r.cuisines || ''}</strong></td></tr>
-                    <tr><td style="padding:5px;"><strong>Address</strong></td><td>${r.address || ''}</td><td><strong>&rarr;</strong></td><td><strong style="color:#059669;">${p.address || r.address || ''}</strong></td></tr>
+                    <tr style="border-bottom: 1px solid rgba(0,0,0,0.1);"><td style="padding:5px;"><strong>Address</strong></td><td>${r.address || ''}</td><td><strong>&rarr;</strong></td><td><strong style="color:#059669;">${p.address || r.address || ''}</strong></td></tr>
+                    <tr><td style="padding:5px;"><strong>Images</strong></td><td style="max-width:150px; overflow-x:auto;">${imgHtml || 'No Image'}</td><td><strong>&rarr;</strong></td><td style="max-width:150px; overflow-x:auto;">${pendingImgHtml || 'No Change'}</td></tr>
                 </table>
             </div>
         `;
