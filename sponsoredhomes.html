@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponsored Homes | NEXUS Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <style>
+        .form-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-primary); }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;
+            background: var(--bg-light); color: var(--text-primary); font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            background: #4f46e5; color: white; border: none; width: 100%; padding: 15px;
+            border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .submit-btn:hover { background: #4338ca; }
+        
+        .preview-img { max-width: 100%; border-radius: 12px; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-layer-group"></i>
+                <span>NEXUS</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+            <a href="users.html" class="nav-item"><i class="fas fa-users"></i><span>Users</span></a>
+            <a href="hosts.html" class="nav-item"><i class="fas fa-user-tie"></i><span>Hosts</span></a>
+            <a href="properties.html" class="nav-item active"><i class="fas fa-building"></i><span>Properties</span></a>
+            <a href="gyms.html" class="nav-item"><i class="fas fa-dumbbell"></i><span>Gyms</span></a>
+            <a href="restaurants.html" class="nav-item"><i class="fas fa-utensils"></i><span>Restaurants</span></a>
+            <a href="fests.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span>Fests</span></a>
+            <a href="colleges.html" class="nav-item"><i class="fas fa-university"></i><span>Colleges</span></a>
+        </nav>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></button>
+                <h2>Create Sponsored Home Ad</h2>
+            </div>
+            <a href="properties.html" style="color: #4f46e5; text-decoration: none; font-weight: 600;"><i class="fas fa-arrow-left"></i> Back to Properties</a>
+        </header>
+
+        <div class="page-content">
+            <div class="form-card">
+                <form id="sponsoredForm">
+                    <div class="form-group">
+                        <label>Company / Project Name</label>
+                        <input type="text" id="companyName" required placeholder="e.g. DLF Magnolias">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Starting Price (Text)</label>
+                        <input type="text" id="priceStr" required placeholder="e.g. ₹5.5 Cr">
+                    </div>
+
+                    <div class="form-group">
+                        <label>External Website Link</label>
+                        <input type="url" id="externalLink" required placeholder="https://...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>About Information (Flip Side Text)</label>
+                        <textarea id="aboutText" rows="4" required placeholder="Luxurious 4BHK apartments spanning 4,000 sq ft..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ad Image</label>
+                        <input type="file" id="imageFile" accept="image/*" required>
+                        <img id="imagePreview" class="preview-img">
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">Publish Sponsored Ad <i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script>
+        const imageFile = document.getElementById('imageFile');
+        const imagePreview = document.getElementById('imagePreview');
+        let imageBase64 = null;
+
+        imageFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    imageBase64 = ev.target.result;
+                    imagePreview.src = imageBase64;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('sponsoredForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.innerHTML = 'Uploading... <i class="fas fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+
+            const payload = {
+                companyName: document.getElementById('companyName').value,
+                priceStr: document.getElementById('priceStr').value,
+                externalLink: document.getElementById('externalLink').value,
+                aboutText: document.getElementById('aboutText').value,
+                imageBase64: imageBase64
+            };
+
+            try {
+                console.log("Sending payload...");
+                const res = await fetch(`${window.API_BASE_URL}/admin/sponsored-homes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await res.json();
+                if(data.success) {
+                    alert('Sponsored Home Published Successfully!');
+                    window.location.href = 'properties.html';
+                } else {
+                    alert('Failed: ' + data.message);
+                }
+            } catch(err) {
+                console.error(err);
+                alert('System Error uploading Ad.');
+            } finally {
+                btn.innerHTML = 'Publish Sponsored Ad <i class="fas fa-paper-plane"></i>';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
