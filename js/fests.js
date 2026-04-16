@@ -55,7 +55,8 @@ async function fetchFests() {
                     price: parseFloat(f.pricing_amount) || 250,
                     attendees: soldTickets, // Approximate attendees to sold tickets
                     rating: 0,
-                    description: f.description || 'No description provided'
+                    description: f.description || 'No description provided',
+                    metadata: f.metadata || {}
                 };
             });
             renderFests();
@@ -415,6 +416,19 @@ function viewFest(id) {
                         <span class="detail-label">Total Tickets</span>
                         <span class="detail-value">${fest.totalTickets.toLocaleString()}</span>
                     </div>
+                    ${fest.metadata && Object.keys(fest.metadata).length > 0 ? `
+                        <div style="grid-column: 1 / -1; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-light);">
+                            <h5 style="margin-bottom: 10px; color: var(--pink);">🔥 Experience Vibe Details</h5>
+                            <div class="detail-grid">
+                            ${Object.entries(fest.metadata).map(([key, val]) => `
+                                <div class="detail-item">
+                                    <span class="detail-label" style="text-transform: capitalize;">${key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                                    <span class="detail-value">${val === true ? 'Yes' : val === false ? 'No' : val || '-'}</span>
+                                </div>
+                            `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
             </div>
             <div class="detail-section">
