@@ -151,6 +151,25 @@ function viewRestaurant(id) {
 
     document.getElementById('modalBody').innerHTML = `
         ${diffHtml}
+        
+        <!-- NEW: Performance Metrics -->
+        <div style="grid-column:1/-1; background:#f0fdf4; padding:15px; border-radius:8px; border-left:4px solid #16a34a; margin-bottom: 15px; display:flex; justify-content:space-around; align-items:center;">
+            <div style="text-align:center;">
+                <div style="color:var(--text-secondary); font-size:0.8rem; text-transform:uppercase; font-weight:800; letter-spacing:1px; margin-bottom:5px;">Total Impressions</div>
+                <div style="font-size:1.8rem; font-weight:900; color:#111827;">${r.impressions_count || 0}</div>
+            </div>
+            <div style="height:40px; width:1px; background:rgba(0,0,0,0.1);"></div>
+            <div style="text-align:center;">
+                <div style="color:var(--text-secondary); font-size:0.8rem; text-transform:uppercase; font-weight:800; letter-spacing:1px; margin-bottom:5px;">Total Clicks (Visits)</div>
+                <div style="font-size:1.8rem; font-weight:900; color:#111827;">${r.clicks_count || 0}</div>
+            </div>
+             <div style="height:40px; width:1px; background:rgba(0,0,0,0.1);"></div>
+            <div style="text-align:center;">
+                <div style="color:var(--text-secondary); font-size:0.8rem; text-transform:uppercase; font-weight:800; letter-spacing:1px; margin-bottom:5px;">CTR</div>
+                <div style="font-size:1.8rem; font-weight:900; color:#16a34a;">${((r.clicks_count || 0) / (r.impressions_count || 1) * 100).toFixed(1)}%</div>
+            </div>
+        </div>
+
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
             <div>
                 <small style="color:var(--text-secondary)">FSSAI License</small>
